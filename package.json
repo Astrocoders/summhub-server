@@ -1,0 +1,52 @@
+{
+  "name": "summarize",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "pesy",
+    "release": {"releasedBinaries": ["SummarizeApp.exe"]}
+  },
+  "buildDirs": {
+    "test": {
+      "require": ["summarize.lib"],
+      "main": "TestSummarize",
+      "name": "TestSummarize.exe"
+    },
+    "library": {"name": "summarize.lib", "namespace": "Summarize"},
+    "executable": {
+      "require": [
+        "lwt",
+        "lwt.unix",
+        "str",
+        "pastel.lib",
+        "console.lib",
+        "graphql-lwt",
+        "graphql-cohttp",
+        "cohttp-lwt-unix",
+        "summarize.lib"
+      ],
+      "main": "SummarizeApp",
+      "name": "SummarizeApp.exe"
+    }
+  },
+  "scripts": {
+    "pesy": "bash -c 'env PESY_MODE=update pesy'",
+    "test": "esy x TestSummarize.exe"
+  },
+  "dependencies": {
+    "@esy-ocaml/reason": "*",
+    "@opam/cohttp-lwt-unix": "1.2.0",
+    "@opam/dune": ">=1.6.0",
+    "@opam/graphql-cohttp": "0.8.0",
+    "@opam/graphql-lwt": "0.8.0",
+    "@opam/lwt": "4.1.0",
+    "@opam/lwt_ppx": "1.2.1",
+    "@opam/ppx_let": "v0.11.0",
+    "@reason-native/console": "^0.0.3",
+    "@reason-native/pastel": "^0.1.0",
+    "ocaml": "^4.4.0",
+    "pesy": "*",
+    "refmterr": "*"
+  },
+  "devDependencies": {"@opam/merlin": "*"}
+}
