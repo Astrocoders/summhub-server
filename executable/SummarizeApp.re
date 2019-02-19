@@ -1,4 +1,5 @@
 open Graphql_lwt;
+open AppSchema;
 
 type role =
   | User
@@ -39,16 +40,11 @@ let user =
           p.id
         ),
         field(
-          "name", 
-          ~args=Arg.[],
-          ~typ=non_null(string),
-          ~resolve=(info, p) => p.name
+          "name", ~args=Arg.[], ~typ=non_null(string), ~resolve=(info, p) =>
+          p.name
         ),
-        field(
-          "role", 
-          ~args=Arg.[],
-          ~typ=non_null(role),
-          ~resolve=(info, p) => p.role
+        field("role", ~args=Arg.[], ~typ=non_null(role), ~resolve=(info, p) =>
+          p.role
         ),
       ]
     )
@@ -56,30 +52,43 @@ let user =
 
 let schema =
   Graphql_lwt.Schema.(
-    schema([
-      io_field(
-        "users", 
-        ~typ=non_null(list(non_null(user))), 
-        ~args=Arg.[],
-        ~resolve=( (info, ()) => Lwt.return( ( Ok( users ) ) ) )
-      ),
-    ])
+    schema(
+      [
+        io_field(
+          "users",
+          ~typ=non_null(list(non_null(user))),
+          ~args=Arg.[],
+          ~resolve=(_info, ()) =>
+          Lwt.return(Ok(users))
+        ),
+        io_field("currentUser", ~typ=user, ~args=Arg.[], ~resolve=(_info, ()) =>
+          Lwt.return(Ok(None))
+        ),
+      ],
+      ~mutations=[
+        SignInMutation.signIn,
+        ForgotPasswordMutation.forgotPassword,
+        ResetPasswordMutation.resetPassword,
+      ],
+    )
   );
-
 
 module Graphql_cohttp_lwt =
   Graphql_cohttp.Make(Graphql_lwt.Schema, Cohttp_lwt.Body);
 
-let _ = Lwt_main.run({
-  let callback = Graphql_cohttp_lwt.make_callback(_req => (), schema);
-  let server = Cohttp_lwt_unix.Server.make(~callback, ());
-  let port = 3000
-  let mode = `TCP(`Port(port));
-  Console.log(
-    <Pastel>
-      <Pastel>"Running at "</Pastel>
-      <Pastel color=Cyan> { string_of_int(port) } </Pastel>
-    </Pastel>
+let _ =
+  Lwt_main.run(
+    {
+      let callback = Graphql_cohttp_lwt.make_callback(_req => Context.{user: None}, schema);
+      let server = Cohttp_lwt_unix.Server.make(~callback, ());
+      let port = 3000;
+      let mode = `TCP(`Port(port));
+      Console.log(
+        <Pastel>
+          <Pastel> "Running at " </Pastel>
+          <Pastel color=Cyan> {string_of_int(port)} </Pastel>
+        </Pastel>,
+      );
+      Cohttp_lwt_unix.Server.create(~mode, server);
+    },
   );
-  Cohttp_lwt_unix.Server.create(~mode, server);
-});
