@@ -7,5 +7,5 @@
    (name SummarizeApp)  ;  From package.json main field
    ; The name of the executable (runnable via esy x SummarizeApp.exe) 
    (public_name SummarizeApp.exe)  ;  From package.json name field
-   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix summarize.lib ) ;  From package.json require field (array of strings)
+   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix summarize.lib summarize.schema ) ;  From package.json require field (array of strings)
 )
