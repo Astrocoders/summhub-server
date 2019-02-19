@@ -4,26 +4,27 @@
   "description": "My Project",
   "esy": {
     "build": "pesy",
-    "release": {"releasedBinaries": ["SummarizeApp.exe"]}
+    "release": { "releasedBinaries": [ "SummarizeApp.exe" ] }
   },
   "buildDirs": {
     "test": {
-      "require": ["summarize.lib"],
+      "require": [ "summarize.lib" ],
       "main": "TestSummarize",
       "name": "TestSummarize.exe"
     },
-    "library": {"name": "summarize.lib", "namespace": "Summarize"},
+    "library": { "name": "summarize.lib", "namespace": "Summarize" },
+    "schema": {
+      "name": "summarize.schema", 
+      "namespace": "AppSchema",
+      "require": [
+        "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
+        "graphql-cohttp", "cohttp-lwt-unix"
+      ]
+    },
     "executable": {
       "require": [
-        "lwt",
-        "lwt.unix",
-        "str",
-        "pastel.lib",
-        "console.lib",
-        "graphql-lwt",
-        "graphql-cohttp",
-        "cohttp-lwt-unix",
-        "summarize.lib"
+        "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
+        "graphql-cohttp", "cohttp-lwt-unix", "summarize.lib", "summarize.schema"
       ],
       "main": "SummarizeApp",
       "name": "SummarizeApp.exe"
@@ -39,6 +40,7 @@
     "@opam/dune": ">=1.6.0",
     "@opam/graphql-cohttp": "0.8.0",
     "@opam/graphql-lwt": "0.8.0",
+    "@opam/jwto": "0.1.4",
     "@opam/lwt": "4.1.0",
     "@opam/lwt_ppx": "1.2.1",
     "@opam/ppx_let": "v0.11.0",
@@ -48,5 +50,5 @@
     "pesy": "*",
     "refmterr": "*"
   },
-  "devDependencies": {"@opam/merlin": "*"}
+  "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" }
 }
