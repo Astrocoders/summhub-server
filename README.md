@@ -1,7 +1,6 @@
-# summarize
+# SummHub Server
 
-
-[![CircleCI](https://circleci.com/gh/yourgithubhandle/summarize/tree/master.svg?style=svg)](https://circleci.com/gh/yourgithubhandle/summarize/tree/master)
+[![CircleCI](https://circleci.com/gh/astrocoders/summhub-server/tree/master.svg?style=svg)](https://circleci.com/gh/astrocoders/summhub-server/tree/master)
 
 
 **Contains the following libraries and executables:**
