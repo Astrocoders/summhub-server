@@ -14,7 +14,7 @@
     },
     "library": { "name": "summarize.lib", "namespace": "Summarize" },
     "schema": {
-      "name": "summarize.schema", 
+      "name": "summarize.schema",
       "namespace": "AppSchema",
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
@@ -31,6 +31,7 @@
     }
   },
   "scripts": {
+    "start": "esy b && esy x SummarizeApp.exe",
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
     "test": "esy x TestSummarize.exe"
   },
