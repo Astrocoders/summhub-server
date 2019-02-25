@@ -1,14 +1,13 @@
-FROM node:10.15.1
+FROM astrocoders/esy:0.5.6
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN apt-get install -y libpq-dev
 
-COPY . /usr/src/app
-
-RUN yarn global add esy
-RUN esy install
-RUN esy build
+COPY . /workspace
+WORKDIR /workspace
 
 EXPOSE 3000
 
-CMD esy x SummarizeApp.exe
+RUN esy i
+RUN esy b
+
+ENTRYPOINT ["esy", "x", "SummarizeApp.exe"]
