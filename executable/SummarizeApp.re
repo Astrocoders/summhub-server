@@ -1,19 +1,14 @@
 open Graphql_lwt;
 open AppSchema;
 
-type role =
-  | User
-  | Admin;
-type user = {
-  id: int,
-  name: string,
-  role,
+let mockedSummary: User.summary = {
+  unread: 1,
+  total: 2,
+  projects: 0,
+  organizations: 0,
 };
 
-let users = [
-  {id: 1, name: "Alice", role: Admin},
-  {id: 2, name: "Bob", role: User},
-];
+let mockedUser: User.t = {id: 1, name: "Alice", role: Admin};
 
 let role =
   Schema.(
@@ -21,32 +16,82 @@ let role =
       "role",
       ~doc="The role of a user",
       ~values=[
-        enum_value("USER", ~value=User),
-        enum_value("ADMIN", ~value=Admin),
+        enum_value("USER", ~value=User.User),
+        enum_value("ADMIN", ~value=User.Admin),
       ],
     )
   );
 
-let user =
+let summary =
   Schema.(
-    obj("user", ~doc="A user in the system", ~fields=_ =>
+    obj("summary", ~doc="User's summary of notifications", ~fields=_ =>
       [
         field(
-          "id",
-          ~doc="Unique user identifier",
+          "unread",
+          ~doc="Count of unread items",
           ~typ=non_null(int),
           ~args=Arg.[],
-          ~resolve=(info, p) =>
-          p.id
+          ~resolve=(info, p: User.summary) =>
+          p.unread
         ),
         field(
-          "name", ~args=Arg.[], ~typ=non_null(string), ~resolve=(info, p) =>
-          p.name
+          "total",
+          ~doc="Total of notifications",
+          ~typ=non_null(int),
+          ~args=Arg.[],
+          ~resolve=(info, p: User.summary) =>
+          p.total
         ),
-        field("role", ~args=Arg.[], ~typ=non_null(role), ~resolve=(info, p) =>
-          p.role
+        field(
+          "projects",
+          ~doc="Total of projects",
+          ~typ=non_null(int),
+          ~args=Arg.[],
+          ~resolve=(info, p: User.summary) =>
+          p.projects
+        ),
+        field(
+          "organizations",
+          ~doc="Total of organizations",
+          ~typ=non_null(int),
+          ~args=Arg.[],
+          ~resolve=(info, p: User.summary) =>
+          p.organizations
         ),
       ]
+    )
+  );
+
+let user =
+  User.(
+    Schema.(
+      obj("user", ~doc="A user in the system", ~fields=_ =>
+        [
+          field(
+            "id",
+            ~doc="Unique user identifier",
+            ~typ=non_null(int),
+            ~args=Arg.[],
+            ~resolve=(info, p) =>
+            p.id
+          ),
+          field(
+            "name", ~args=Arg.[], ~typ=non_null(string), ~resolve=(info, p) =>
+            p.name
+          ),
+          field(
+            "role", ~args=Arg.[], ~typ=non_null(role), ~resolve=(info, p) =>
+            p.role
+          ),
+          field(
+            "summary",
+            ~args=Arg.[],
+            ~typ=non_null(summary),
+            ~resolve=(info, p) =>
+            mockedSummary
+          ),
+        ]
+      )
     )
   );
 
@@ -55,14 +100,11 @@ let schema =
     schema(
       [
         io_field(
-          "users",
-          ~typ=non_null(list(non_null(user))),
+          "currentUser",
+          ~typ=user,
           ~args=Arg.[],
-          ~resolve=(_info, ()) =>
-          Lwt.return(Ok(users))
-        ),
-        io_field("currentUser", ~typ=user, ~args=Arg.[], ~resolve=(_info, ()) =>
-          Lwt.return(Ok(None))
+          ~resolve=(info: Context.t, ()) =>
+          Lwt.return(Ok(info.user))
         ),
       ],
       ~mutations=[
@@ -79,7 +121,11 @@ module Graphql_cohttp_lwt =
 let _ =
   Lwt_main.run(
     {
-      let callback = Graphql_cohttp_lwt.make_callback(_req => Context.{user: None}, schema);
+      let callback =
+        Graphql_cohttp_lwt.make_callback(
+          _req => Context.{user: Some(mockedUser)},
+          schema,
+        );
       let server = Cohttp_lwt_unix.Server.make(~callback, ());
       let port = 3000;
       let mode = `TCP(`Port(port));
