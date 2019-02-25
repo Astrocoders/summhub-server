@@ -1,35 +1,14 @@
 open Graphql_lwt;
 open AppSchema;
 
-type role =
-  | User
-  | Admin;
-
-type summary = {
-  unread: int,
-  total: int,
-  projects: int,
-  organizations: int,
+let mockedSummary: User.summary = {
+  unread: 1,
+  total: 2,
+  projects: 0,
+  organizations: 0,
 };
 
-type user = {
-  id: int,
-  name: string,
-  role,
-  summary,
-};
-
-let mockedUser: user = {
-  id: 1,
-  name: "Alice",
-  role: Admin,
-  summary: {
-    unread: 0,
-    total: 0,
-    projects: 0,
-    organizations: 0,
-  },
-};
+let mockedUser: User.t = {id: 1, name: "Alice", role: Admin};
 
 let role =
   Schema.(
@@ -37,8 +16,8 @@ let role =
       "role",
       ~doc="The role of a user",
       ~values=[
-        enum_value("USER", ~value=User),
-        enum_value("ADMIN", ~value=Admin),
+        enum_value("USER", ~value=User.User),
+        enum_value("ADMIN", ~value=User.Admin),
       ],
     )
   );
@@ -52,7 +31,7 @@ let summary =
           ~doc="Count of unread items",
           ~typ=non_null(int),
           ~args=Arg.[],
-          ~resolve=(info, p: summary) =>
+          ~resolve=(info, p: User.summary) =>
           p.unread
         ),
         field(
@@ -60,7 +39,7 @@ let summary =
           ~doc="Total of notifications",
           ~typ=non_null(int),
           ~args=Arg.[],
-          ~resolve=(info, p: summary) =>
+          ~resolve=(info, p: User.summary) =>
           p.total
         ),
         field(
@@ -68,7 +47,7 @@ let summary =
           ~doc="Total of projects",
           ~typ=non_null(int),
           ~args=Arg.[],
-          ~resolve=(info, p: summary) =>
+          ~resolve=(info, p: User.summary) =>
           p.projects
         ),
         field(
@@ -76,7 +55,7 @@ let summary =
           ~doc="Total of organizations",
           ~typ=non_null(int),
           ~args=Arg.[],
-          ~resolve=(info, p: summary) =>
+          ~resolve=(info, p: User.summary) =>
           p.organizations
         ),
       ]
@@ -84,29 +63,35 @@ let summary =
   );
 
 let user =
-  Schema.(
-    obj("user", ~doc="A user in the system", ~fields=_ =>
-      [
-        field(
-          "id",
-          ~doc="Unique user identifier",
-          ~typ=non_null(int),
-          ~args=Arg.[],
-          ~resolve=(info, p) =>
-          p.id
-        ),
-        field(
-          "name", ~args=Arg.[], ~typ=non_null(string), ~resolve=(info, p) =>
-          p.name
-        ),
-        field("role", ~args=Arg.[], ~typ=non_null(role), ~resolve=(info, p) =>
-          p.role
-        ),
-        field(
-          "summary", ~args=Arg.[], ~typ=non_null(summary), ~resolve=(info, p) =>
-          p.summary
-        ),
-      ]
+  User.(
+    Schema.(
+      obj("user", ~doc="A user in the system", ~fields=_ =>
+        [
+          field(
+            "id",
+            ~doc="Unique user identifier",
+            ~typ=non_null(int),
+            ~args=Arg.[],
+            ~resolve=(info, p) =>
+            p.id
+          ),
+          field(
+            "name", ~args=Arg.[], ~typ=non_null(string), ~resolve=(info, p) =>
+            p.name
+          ),
+          field(
+            "role", ~args=Arg.[], ~typ=non_null(role), ~resolve=(info, p) =>
+            p.role
+          ),
+          field(
+            "summary",
+            ~args=Arg.[],
+            ~typ=non_null(summary),
+            ~resolve=(info, p) =>
+            mockedSummary
+          ),
+        ]
+      )
     )
   );
 
@@ -114,8 +99,12 @@ let schema =
   Graphql_lwt.Schema.(
     schema(
       [
-        io_field("currentUser", ~typ=user, ~args=Arg.[], ~resolve=(_info, ()) =>
-          Lwt.return(Ok(Some(mockedUser)))
+        io_field(
+          "currentUser",
+          ~typ=user,
+          ~args=Arg.[],
+          ~resolve=(info: Context.t, ()) =>
+          Lwt.return(Ok(info.user))
         ),
       ],
       ~mutations=[
@@ -134,7 +123,7 @@ let _ =
     {
       let callback =
         Graphql_cohttp_lwt.make_callback(
-          _req => Context.{user: None},
+          _req => Context.{user: Some(mockedUser)},
           schema,
         );
       let server = Cohttp_lwt_unix.Server.make(~callback, ());
