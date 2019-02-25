@@ -1,3 +1,9 @@
+type summary = {
+  unread: int,
+  total: int,
+  projects: int,
+  organizations: int,
+};
 
 type role =
   | User
@@ -7,6 +13,7 @@ type user = {
   id: int,
   name: string,
   role,
+  summary,
 };
 
 type t = {user: option(user)};
