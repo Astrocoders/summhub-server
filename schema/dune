@@ -7,5 +7,5 @@
    (name AppSchema)
    ; Other libraries list this name in their package.json 'require' field to use this library.
    (public_name summarize.schema)
-   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix )
+   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix summarize.graphql-helpers )
 )

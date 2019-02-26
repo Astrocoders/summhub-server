@@ -1,4 +1,5 @@
 open Graphql_lwt;
+open GraphqlHelpers;
 
 module Project = {
   type t = {
@@ -7,86 +8,39 @@ module Project = {
     webhook: string,
   };
 
-  type project = t;
-
-  let typeResolver =
+  let resolver =
     Schema.(
       obj("project", ~doc="Project of an organization", ~fields=_ =>
         [
-          field(
-            "id",
-            ~typ=non_null(int),
-            ~args=Arg.[],
-            ~resolve=(info: Context.t, p: t) =>
+          field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(info, p: t) =>
             p.id
           ),
           field(
             "name",
             ~typ=non_null(string),
             ~args=Arg.[],
-            ~resolve=(info: Context.t, p: t) =>
+            ~resolve=(info, p: t) =>
             p.name
           ),
           field(
             "webhook",
             ~typ=non_null(string),
             ~args=Arg.[],
-            ~resolve=(info: Context.t, p: t) =>
+            ~resolve=(info, p: t) =>
             p.webhook
           ),
         ]
       )
     );
 
-  let connectionEdge =
-    Connection.(
-      Schema.(
-        obj("projectConnectionEdge", ~doc="Project Connection Edge", ~fields=_ =>
-          [
-            field(
-              "cursor",
-              ~doc="Cursor of connection edge",
-              ~typ=non_null(string),
-              ~args=Arg.[],
-              ~resolve=(info, p: edge(project)) =>
-              p.cursor
-            ),
-            field(
-              "node",
-              ~doc="Node of connection edge",
-              ~typ=non_null(typeResolver),
-              ~args=Arg.[],
-              ~resolve=(info, p: edge(project)) =>
-              p.node
-            ),
-          ]
-        )
-      )
-    );
+  module Config = {
+    type nodeType = t;
+    type context = Context.t;
+    let nodeResolver = resolver;
+    let nodeName = "project";
+  };
 
-  let connection =
-    Schema.(
-      obj("projectConnection", ~doc="Projects Connection", ~fields=_ =>
-        [
-          field(
-            "edges",
-            ~doc="Edges of connection",
-            ~typ=list(non_null(connectionEdge)),
-            ~args=Arg.[],
-            ~resolve=(info, p: Connection.t(project)) =>
-            p.edges
-          ),
-          field(
-            "pageInfo",
-            ~doc="PageInfo of connection",
-            ~typ=non_null(Connection.PageInfo.typeResolver),
-            ~args=Arg.[],
-            ~resolve=(info, p: Connection.t(project)) =>
-            p.pageInfo
-          ),
-        ]
-      )
-    );
+  module Connection = Connection.Create(Config);
 };
 
 module Member = {
@@ -95,9 +49,7 @@ module Member = {
     email: string,
   };
 
-  type member = t;
-
-  let typeResolver =
+  let resolver =
     Schema.(
       obj("member", ~doc="Member of an organization", ~fields=_ =>
         [
@@ -112,55 +64,14 @@ module Member = {
       )
     );
 
-  let connectionEdge =
-    Connection.(
-      Schema.(
-        obj("memberConnectionEdge", ~doc="Member Connection Edge", ~fields=_ =>
-          [
-            field(
-              "cursor",
-              ~doc="Cursor of connection edge",
-              ~typ=non_null(string),
-              ~args=Arg.[],
-              ~resolve=(info, p: edge(member)) =>
-              p.cursor
-            ),
-            field(
-              "node",
-              ~doc="Node of connection edge",
-              ~typ=non_null(typeResolver),
-              ~args=Arg.[],
-              ~resolve=(info, p: edge(member)) =>
-              p.node
-            ),
-          ]
-        )
-      )
-    );
+  module Config = {
+    type nodeType = t;
+    type context = Context.t;
+    let nodeResolver = resolver;
+    let nodeName = "member";
+  };
 
-  let connection =
-    Schema.(
-      obj("messagesConnection", ~doc="Messages Connection", ~fields=_ =>
-        [
-          field(
-            "edges",
-            ~doc="Edges of connection",
-            ~typ=list(non_null(connectionEdge)),
-            ~args=Arg.[],
-            ~resolve=(info, p: Connection.t(member)) =>
-            p.edges
-          ),
-          field(
-            "pageInfo",
-            ~doc="PageInfo of connection",
-            ~typ=non_null(Connection.PageInfo.typeResolver),
-            ~args=Arg.[],
-            ~resolve=(info, p: Connection.t(member)) =>
-            p.pageInfo
-          ),
-        ]
-      )
-    );
+  module Connection = Connection.Create(Config);
 };
 
 type t = {
@@ -169,7 +80,7 @@ type t = {
   createdAt: string,
 };
 
-let typeResolver =
+let resolver =
   Schema.(
     obj("organization", ~doc="User organization", ~fields=_ =>
       [
@@ -196,7 +107,7 @@ let typeResolver =
         ),
         field(
           "members",
-          ~typ=Member.connection,
+          ~typ=Member.Connection.connectionResolver,
           ~args=
             Arg.[
               arg("first", ~typ=float),
@@ -209,7 +120,7 @@ let typeResolver =
         ),
         field(
           "projects",
-          ~typ=Project.connection,
+          ~typ=Project.Connection.connectionResolver,
           ~args=
             Arg.[
               arg("first", ~typ=float),
@@ -223,3 +134,12 @@ let typeResolver =
       ]
     )
   );
+
+module Config = {
+  type nodeType = t;
+  type context = Context.t;
+  let nodeResolver = resolver;
+  let nodeName = "organization";
+};
+
+module Connection = Connection.Create(Config);
