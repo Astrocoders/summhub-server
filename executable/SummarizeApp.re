@@ -41,7 +41,7 @@ let role =
   User.(
     Schema.(
       enum(
-        "role",
+        "Role",
         ~doc="The role of a user",
         ~values=[
           enum_value("USER", ~value=User),
@@ -54,7 +54,7 @@ let role =
 let summary =
   User.Summary.(
     Schema.(
-      obj("summary", ~doc="User's summary of notifications", ~fields=_ =>
+      obj("Summary", ~doc="User's summary of notifications", ~fields=_ =>
         [
           field(
             "unread",
@@ -96,7 +96,7 @@ let summary =
 let message =
   User.Message.(
     Schema.(
-      obj("message", ~doc="User notification message", ~fields=_ =>
+      obj("Message", ~doc="User notification message", ~fields=_ =>
         [
           field(
             "id",
@@ -131,7 +131,7 @@ module MessageConfig = {
   type nodeType = User.Message.t;
   type context = Context.t;
   let nodeResolver = message;
-  let nodeName = "message";
+  let nodeName = "Message";
 };
 
 module MessageConnection = Connection.Create(MessageConfig);
@@ -139,7 +139,7 @@ module MessageConnection = Connection.Create(MessageConfig);
 let notification =
   User.Notification.(
     Schema.(
-      obj("notification", ~doc="User notification", ~fields=_ =>
+      obj("Notification", ~doc="User notification", ~fields=_ =>
         [
           field(
             "id",
@@ -185,17 +185,8 @@ let notification =
             ~resolve=(info, p) =>
             p.payload
           ),
-          field(
-            "messages",
-            ~typ=MessageConnection.connectionResolver,
-            ~args=
-              Arg.[
-                arg("first", ~typ=float),
-                arg("after", ~typ=string),
-                arg("last", ~typ=int),
-                arg("before", ~typ=string),
-              ],
-            ~resolve=(_info, p, first, after, last, before) =>
+          MessageConnection.connectionResolver(
+            "messages", (_info, p, first, after, last, before) =>
             None
           ),
         ]
@@ -211,7 +202,7 @@ type timespan = {
 let notificationsArg =
   Schema.Arg.(
     obj(
-      "timespan",
+      "Timespan",
       ~fields=[arg("start", ~typ=string), arg("end", ~typ=string)],
       ~coerce=(start, end_) =>
       {start, end_}
@@ -221,7 +212,7 @@ let notificationsArg =
 let user =
   User.(
     Schema.(
-      obj("user", ~doc="A user in the system", ~fields=_ =>
+      obj("User", ~doc="A user in the system", ~fields=_ =>
         [
           field(
             "id",
@@ -253,17 +244,8 @@ let user =
             ~resolve=(_info, p, filter) =>
             None
           ),
-          field(
-            "organizations",
-            ~typ=Organization.Connection.connectionResolver,
-            ~args=
-              Arg.[
-                arg("first", ~typ=float),
-                arg("after", ~typ=string),
-                arg("last", ~typ=int),
-                arg("before", ~typ=string),
-              ],
-            ~resolve=(_info, p, first, after, last, before) =>
+          Organization.Connection.connectionResolver(
+            "organizations", (_info, p, first, after, last, before) =>
             None
           ),
         ]

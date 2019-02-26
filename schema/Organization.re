@@ -10,7 +10,7 @@ module Project = {
 
   let resolver =
     Schema.(
-      obj("project", ~doc="Project of an organization", ~fields=_ =>
+      obj("Project", ~doc="Project of an organization", ~fields=_ =>
         [
           field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(info, p: t) =>
             p.id
@@ -37,7 +37,7 @@ module Project = {
     type nodeType = t;
     type context = Context.t;
     let nodeResolver = resolver;
-    let nodeName = "project";
+    let nodeName = "Project";
   };
 
   module Connection = Connection.Create(Config);
@@ -51,7 +51,7 @@ module Member = {
 
   let resolver =
     Schema.(
-      obj("member", ~doc="Member of an organization", ~fields=_ =>
+      obj("Member", ~doc="Member of an organization", ~fields=_ =>
         [
           field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(info, p) =>
             p.id
@@ -68,7 +68,7 @@ module Member = {
     type nodeType = t;
     type context = Context.t;
     let nodeResolver = resolver;
-    let nodeName = "member";
+    let nodeName = "Member";
   };
 
   module Connection = Connection.Create(Config);
@@ -82,7 +82,7 @@ type t = {
 
 let resolver =
   Schema.(
-    obj("organization", ~doc="User organization", ~fields=_ =>
+    obj("Organization", ~doc="User organization", ~fields=_ =>
       [
         field(
           "id",
@@ -105,30 +105,12 @@ let resolver =
           ~resolve=(info: Context.t, p: t) =>
           p.createdAt
         ),
-        field(
-          "members",
-          ~typ=Member.Connection.connectionResolver,
-          ~args=
-            Arg.[
-              arg("first", ~typ=float),
-              arg("after", ~typ=string),
-              arg("last", ~typ=int),
-              arg("before", ~typ=string),
-            ],
-          ~resolve=(_info, p, first, after, last, before) =>
+        Member.Connection.connectionResolver(
+          "members", (_info, p, first, after, last, before) =>
           None
         ),
-        field(
-          "projects",
-          ~typ=Project.Connection.connectionResolver,
-          ~args=
-            Arg.[
-              arg("first", ~typ=float),
-              arg("after", ~typ=string),
-              arg("last", ~typ=int),
-              arg("before", ~typ=string),
-            ],
-          ~resolve=(_info, p, first, after, last, before) =>
+        Project.Connection.connectionResolver(
+          "projects", (_info, p, first, after, last, before) =>
           None
         ),
       ]
@@ -139,7 +121,7 @@ module Config = {
   type nodeType = t;
   type context = Context.t;
   let nodeResolver = resolver;
-  let nodeName = "organization";
+  let nodeName = "Organization";
 };
 
 module Connection = Connection.Create(Config);
