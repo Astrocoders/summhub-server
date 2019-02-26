@@ -13,18 +13,26 @@
       "name": "TestSummarize.exe"
     },
     "library": { "name": "summarize.lib", "namespace": "Summarize" },
-    "schema": {
-      "name": "summarize.schema",
-      "namespace": "AppSchema",
+    "graphql-helpers": {
+      "name": "summarize.graphql-helpers",
+      "namespace": "GraphqlHelpers",
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
         "graphql-cohttp", "cohttp-lwt-unix"
       ]
     },
+    "schema": {
+      "name": "summarize.schema",
+      "namespace": "AppSchema",
+      "require": [
+        "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
+        "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers"
+      ]
+    },
     "executable": {
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
-        "graphql-cohttp", "cohttp-lwt-unix", "summarize.lib", "summarize.schema"
+        "graphql-cohttp", "cohttp-lwt-unix", "summarize.lib", "summarize.schema", "summarize.graphql-helpers"
       ],
       "main": "SummarizeApp",
       "name": "SummarizeApp.exe"
