@@ -1,5 +1,6 @@
 open Graphql_lwt;
 open AppSchema;
+open GraphqlHelpers;
 
 let mockedSummary: User.Summary.t = {
   unread: 1,
@@ -126,57 +127,14 @@ let message =
     )
   );
 
-let messagesConnectionEdge =
-  Connection.(
-    Schema.(
-      obj("messagesConnectionEdge", ~doc="Message Connection Edge", ~fields=_ =>
-        [
-          field(
-            "cursor",
-            ~doc="Cursor of connection edge",
-            ~typ=non_null(string),
-            ~args=Arg.[],
-            ~resolve=(info, p: edge(User.Message.t)) =>
-            p.cursor
-          ),
-          field(
-            "node",
-            ~doc="Node of connection edge",
-            ~typ=non_null(message),
-            ~args=Arg.[],
-            ~resolve=(info, p: edge(User.Message.t)) =>
-            p.node
-          ),
-        ]
-      )
-    )
-  );
+module MessageConfig = {
+  type nodeType = User.Message.t;
+  type context = Context.t;
+  let nodeResolver = message;
+  let nodeName = "message";
+};
 
-let messagesConnection =
-  Connection.(
-    Schema.(
-      obj("messagesConnection", ~doc="Messages Connection", ~fields=_ =>
-        [
-          field(
-            "edges",
-            ~doc="Edges of connection",
-            ~typ=list(non_null(messagesConnectionEdge)),
-            ~args=Arg.[],
-            ~resolve=(info, p: Connection.t(User.Message.t)) =>
-            p.edges
-          ),
-          field(
-            "pageInfo",
-            ~doc="PageInfo of connection",
-            ~typ=non_null(PageInfo.typeResolver),
-            ~args=Arg.[],
-            ~resolve=(info, p: Connection.t(User.Message.t)) =>
-            p.pageInfo
-          ),
-        ]
-      )
-    )
-  );
+module MessageConnection = Connection.Create(MessageConfig);
 
 let notification =
   User.Notification.(
@@ -229,7 +187,7 @@ let notification =
           ),
           field(
             "messages",
-            ~typ=messagesConnection,
+            ~typ=MessageConnection.connectionResolver,
             ~args=
               Arg.[
                 arg("first", ~typ=float),
@@ -297,9 +255,16 @@ let user =
           ),
           field(
             "organizations",
-            ~args=Arg.[],
-            ~typ=list(non_null(Organization.typeResolver)),
-            ~resolve=(info: Context.t, p) => None
+            ~typ=Organization.Connection.connectionResolver,
+            ~args=
+              Arg.[
+                arg("first", ~typ=float),
+                arg("after", ~typ=string),
+                arg("last", ~typ=int),
+                arg("before", ~typ=string),
+              ],
+            ~resolve=(_info, p, first, after, last, before) =>
+            None
           ),
         ]
       )
