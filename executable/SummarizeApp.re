@@ -36,51 +36,6 @@ let mockedMessages: list(User.Message.t) = [
   {id: 1, message: "Message", email: "email@provider.com"},
 ];
 
-let pageInfo =
-  Connection.(
-    Schema.(
-      obj("pageInfo", ~doc="Connections page info", ~fields=_ =>
-        [
-          field(
-            "startCursor",
-            ~doc="",
-            ~typ=string,
-            ~args=Arg.[],
-            ~resolve=(info, p: pageInfo) =>
-            p.startCursor
-          ),
-          field(
-            "hasPreviousPage",
-            ~doc="",
-            ~typ=non_null(bool),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.hasPreviousPage
-          ),
-          field(
-            "hasNextPage",
-            ~doc="",
-            ~typ=non_null(bool),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.hasNextPage
-          ),
-          field(
-            "endCursor",
-            ~doc="",
-            ~typ=string,
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.endCursor
-          ),
-          field("total", ~doc="", ~typ=int, ~args=Arg.[], ~resolve=(info, p) =>
-            p.total
-          ),
-        ]
-      )
-    )
-  );
-
 let role =
   User.(
     Schema.(
@@ -213,7 +168,7 @@ let messagesConnection =
           field(
             "pageInfo",
             ~doc="PageInfo of connection",
-            ~typ=non_null(pageInfo),
+            ~typ=non_null(PageInfo.typeResolver),
             ~args=Arg.[],
             ~resolve=(info, p: Connection.t(User.Message.t)) =>
             p.pageInfo
@@ -336,9 +291,15 @@ let user =
           field(
             "notifications",
             ~args=Arg.[arg("filter", ~typ=notificationsArg)],
-            ~typ=list(notification),
+            ~typ=list(non_null(notification)),
             ~resolve=(_info, p, filter) =>
             None
+          ),
+          field(
+            "organizations",
+            ~args=Arg.[],
+            ~typ=list(non_null(Organization.typeResolver)),
+            ~resolve=(info: Context.t, p) => None
           ),
         ]
       )
