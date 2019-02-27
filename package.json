@@ -26,13 +26,14 @@
       "namespace": "AppSchema",
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
-        "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers"
+        "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers", "ezpostgresql"
       ]
     },
     "executable": {
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
-        "graphql-cohttp", "cohttp-lwt-unix", "summarize.lib", "summarize.schema", "summarize.graphql-helpers"
+        "graphql-cohttp", "cohttp-lwt-unix", "summarize.lib",
+        "summarize.schema", "summarize.graphql-helpers", "ezpostgresql"
       ],
       "main": "SummarizeApp",
       "name": "SummarizeApp.exe"
@@ -55,7 +56,8 @@
     "@opam/ppx_let": "v0.11.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
-    "ocaml": "^4.4.0",
+    "ezpostgresql": "bobbypriambodo/ezpostgresql:ezpostgresql.opam#master",
+    "ocaml": ">=4.06.0",
     "pesy": "*",
     "refmterr": "*"
   },
