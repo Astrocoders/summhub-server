@@ -269,6 +269,7 @@ let schema =
         SignInMutation.signIn,
         ForgotPasswordMutation.forgotPassword,
         ResetPasswordMutation.resetPassword,
+        RequestSignInLinkMutation.requestSignInLink,
       ],
     )
   );
