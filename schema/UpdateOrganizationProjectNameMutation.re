@@ -1,17 +1,33 @@
 open Graphql_lwt;
 open GraphqlHelpers;
 
+type updateOrganizationProjectNameInput = {
+  projectId: int,
+  name: string,
+};
+
+let updateOrganizationProjectNameInput =
+  Schema.Arg.(
+    obj(
+      "UpdateOrganizationProjectNameInput",
+      ~fields=[
+        arg("projectId", ~typ=non_null(int)),
+        arg("name", ~typ=non_null(string)),
+      ],
+      ~coerce=(projectId, name) =>
+      {projectId, name}
+    )
+  );
+
 let payload =
   Schema.(
     obj(
-      "AddOrganizationProjectPayload",
+      "UpdateOrganizationProjectNamePayload",
       ~fields=(
                 _:
                   Graphql_lwt.Schema.typ(
                     Context.t,
-                    option(
-                      (option(string), option(Organization.Project.t)),
-                    ),
+                    option((option(string), option(Organization.Project.t))),
                   ),
               ) =>
       [
@@ -33,12 +49,12 @@ let payload =
     )
   );
 
-let addOrganizationProject =
+let updateOrganizationProjectName =
   Schema.(
     io_field(
-      "addOrganizationProject",
+      "updateOrganizationProjectName",
       ~typ=non_null(payload),
-      ~args=Arg.[arg("organizationId", ~typ=non_null(int))],
+      ~args=Arg.[arg("input", ~typ=non_null(updateOrganizationProjectNameInput))],
       ~resolve=(info, (), _input) =>
       switch (info.user) {
       | Some(user) => Lwt.return(Ok((None, None)))

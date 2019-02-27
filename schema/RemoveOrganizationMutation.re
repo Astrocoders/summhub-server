@@ -1,4 +1,5 @@
 open Graphql_lwt;
+open GraphqlHelpers;
 
 let payload =
   Schema.(
@@ -21,7 +22,7 @@ let removeOrganization =
       ~resolve=(info, (), companyId) =>
       switch (info.user) {
       | Some(user) => Lwt.return(Ok(None))
-      | None => Lwt.return(Ok(Some("User not authenticated")))
+      | None => Lwt.return(Ok(Some(Errors.unauthorized)))
       }
     )
   );
