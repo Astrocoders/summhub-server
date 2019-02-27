@@ -1,6 +1,7 @@
 open Graphql_lwt;
 open AppSchema;
 open GraphqlHelpers;
+open Ezpostgresql;
 
 let mockedSummary: User.Summary.t = {
   unread: 1,
@@ -247,9 +248,14 @@ module Graphql_cohttp_lwt =
 let _ =
   Lwt_main.run(
     {
+      let conninfo =
+        try (Sys.getenv("DATABASE_URL")) {
+        | Not_found => "postgresql://localhost:5432/summer_hub_dev"
+        };
+      let pool = Pool.create(~conninfo, ~size=10, ());
       let callback =
         Graphql_cohttp_lwt.make_callback(
-          _req => Context.{user: Some(mockedUser)},
+          _req => Context.{user: Some(mockedUser), connection: pool},
           schema,
         );
       let server = Cohttp_lwt_unix.Server.make(~callback, ());
