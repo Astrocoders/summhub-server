@@ -230,6 +230,7 @@ let schema =
         SendMessageMutation.sendMessage,
         CreateOrganizationMutation.createOrganization,
         RemoveOrganizationMutation.removeOrganization,
+        UpdateOrganizationNameMutation.updateOrganizationName,
       ],
     )
   );
