@@ -122,16 +122,13 @@ module Create = (Config: Config) => {
         ]
       )
     );
-  let connectionResolver = (name, cb) =>
+  let connectionResolver = (~args=Schema.Arg.[], name, cb) =>
     Schema.field(
       name,
       ~typ=connectionType,
       ~args=
         Schema.Arg.[
-          arg("first", ~typ=float),
-          arg("after", ~typ=string),
-          arg("last", ~typ=int),
-          arg("before", ~typ=string),
+          ...args
         ],
       ~resolve=cb,
     );
