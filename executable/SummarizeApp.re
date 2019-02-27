@@ -1,5 +1,6 @@
 open Graphql_lwt;
 open AppSchema;
+open GraphqlHelpers;
 
 let mockedSummary: User.Summary.t = {
   unread: 1,
@@ -36,56 +37,11 @@ let mockedMessages: list(User.Message.t) = [
   {id: 1, message: "Message", email: "email@provider.com"},
 ];
 
-let pageInfo =
-  Connection.(
-    Schema.(
-      obj("pageInfo", ~doc="Connections page info", ~fields=_ =>
-        [
-          field(
-            "startCursor",
-            ~doc="",
-            ~typ=string,
-            ~args=Arg.[],
-            ~resolve=(info, p: pageInfo) =>
-            p.startCursor
-          ),
-          field(
-            "hasPreviousPage",
-            ~doc="",
-            ~typ=non_null(bool),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.hasPreviousPage
-          ),
-          field(
-            "hasNextPage",
-            ~doc="",
-            ~typ=non_null(bool),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.hasNextPage
-          ),
-          field(
-            "endCursor",
-            ~doc="",
-            ~typ=string,
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.endCursor
-          ),
-          field("total", ~doc="", ~typ=int, ~args=Arg.[], ~resolve=(info, p) =>
-            p.total
-          ),
-        ]
-      )
-    )
-  );
-
 let role =
   User.(
     Schema.(
       enum(
-        "role",
+        "Role",
         ~doc="The role of a user",
         ~values=[
           enum_value("USER", ~value=User),
@@ -98,7 +54,7 @@ let role =
 let summary =
   User.Summary.(
     Schema.(
-      obj("summary", ~doc="User's summary of notifications", ~fields=_ =>
+      obj("Summary", ~doc="User's summary of notifications", ~fields=_ =>
         [
           field(
             "unread",
@@ -140,7 +96,7 @@ let summary =
 let message =
   User.Message.(
     Schema.(
-      obj("message", ~doc="User notification message", ~fields=_ =>
+      obj("Message", ~doc="User notification message", ~fields=_ =>
         [
           field(
             "id",
@@ -171,62 +127,19 @@ let message =
     )
   );
 
-let messagesConnectionEdge =
-  Connection.(
-    Schema.(
-      obj("messagesConnectionEdge", ~doc="Message Connection Edge", ~fields=_ =>
-        [
-          field(
-            "cursor",
-            ~doc="Cursor of connection edge",
-            ~typ=non_null(string),
-            ~args=Arg.[],
-            ~resolve=(info, p: edge(User.Message.t)) =>
-            p.cursor
-          ),
-          field(
-            "node",
-            ~doc="Node of connection edge",
-            ~typ=non_null(message),
-            ~args=Arg.[],
-            ~resolve=(info, p: edge(User.Message.t)) =>
-            p.node
-          ),
-        ]
-      )
-    )
-  );
+module MessageConfig = {
+  type nodeType = User.Message.t;
+  type context = Context.t;
+  let nodeResolver = message;
+  let nodeName = "Message";
+};
 
-let messagesConnection =
-  Connection.(
-    Schema.(
-      obj("messagesConnection", ~doc="Messages Connection", ~fields=_ =>
-        [
-          field(
-            "edges",
-            ~doc="Edges of connection",
-            ~typ=list(non_null(messagesConnectionEdge)),
-            ~args=Arg.[],
-            ~resolve=(info, p: Connection.t(User.Message.t)) =>
-            p.edges
-          ),
-          field(
-            "pageInfo",
-            ~doc="PageInfo of connection",
-            ~typ=non_null(pageInfo),
-            ~args=Arg.[],
-            ~resolve=(info, p: Connection.t(User.Message.t)) =>
-            p.pageInfo
-          ),
-        ]
-      )
-    )
-  );
+module MessageConnection = Connection.Create(MessageConfig);
 
 let notification =
   User.Notification.(
     Schema.(
-      obj("notification", ~doc="User notification", ~fields=_ =>
+      obj("Notification", ~doc="User notification", ~fields=_ =>
         [
           field(
             "id",
@@ -272,17 +185,8 @@ let notification =
             ~resolve=(info, p) =>
             p.payload
           ),
-          field(
-            "messages",
-            ~typ=messagesConnection,
-            ~args=
-              Arg.[
-                arg("first", ~typ=float),
-                arg("after", ~typ=string),
-                arg("last", ~typ=int),
-                arg("before", ~typ=string),
-              ],
-            ~resolve=(_info, p, first, after, last, before) =>
+          MessageConnection.connectionResolver(
+            "messages", (_info, p, first, after, last, before) =>
             None
           ),
         ]
@@ -298,7 +202,7 @@ type timespan = {
 let notificationsArg =
   Schema.Arg.(
     obj(
-      "timespan",
+      "Timespan",
       ~fields=[arg("start", ~typ=string), arg("end", ~typ=string)],
       ~coerce=(start, end_) =>
       {start, end_}
@@ -308,7 +212,7 @@ let notificationsArg =
 let user =
   User.(
     Schema.(
-      obj("user", ~doc="A user in the system", ~fields=_ =>
+      obj("User", ~doc="A user in the system", ~fields=_ =>
         [
           field(
             "id",
@@ -336,8 +240,12 @@ let user =
           field(
             "notifications",
             ~args=Arg.[arg("filter", ~typ=notificationsArg)],
-            ~typ=list(notification),
+            ~typ=list(non_null(notification)),
             ~resolve=(_info, p, filter) =>
+            None
+          ),
+          Organization.Connection.connectionResolver(
+            "organizations", (_info, p, first, after, last, before) =>
             None
           ),
         ]

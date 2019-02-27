@@ -4,8 +4,8 @@
 ; !!!! If you want to stop using pesy and manage this file by hand, change pacakge.json's 'esy.build' command to: refmterr dune build -p  summarize
 (library
    ; The namespace that other packages/libraries will access this library through
-   (name AppSchema)
+   (name GraphqlHelpers)
    ; Other libraries list this name in their package.json 'require' field to use this library.
-   (public_name summarize.schema)
-   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix summarize.graphql-helpers )
+   (public_name summarize.graphql-helpers)
+   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix )
 )
