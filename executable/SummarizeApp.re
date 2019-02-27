@@ -228,6 +228,7 @@ let schema =
         ResetPasswordMutation.resetPassword,
         RequestSignInLinkMutation.requestSignInLink,
         SendMessageMutation.sendMessage,
+        CreateOrganizationMutation.createOrganization,
       ],
     )
   );
