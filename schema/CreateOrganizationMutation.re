@@ -1,4 +1,5 @@
 open Graphql_lwt;
+open GraphqlHelpers;
 
 let payload =
   Schema.(
@@ -39,7 +40,7 @@ let createOrganization =
       ~resolve=(info, ()) =>
       switch (info.user) {
       | Some(user) => Lwt.return(Ok((None, None)))
-      | None => Lwt.return(Ok((Some("User not authenticated"), None)))
+      | None => Lwt.return(Ok((Some(Errors.unauthorized), None)))
       }
     )
   );
