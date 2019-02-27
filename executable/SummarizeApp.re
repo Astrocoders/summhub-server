@@ -9,11 +9,11 @@ let mockedSummary: User.Summary.t = {
   organizations: 0,
 };
 
-let mockedUser: User.t = {id: 1, name: "Alice", role: Admin};
+let mockedUser: User.t = {id: "1", name: "Alice", role: Admin};
 
 let mockedNotifications: list(User.Notification.t) = [
   {
-    id: 1,
+    id: "1",
     title: "Title",
     body: "Body",
     createdAt: "CreatedAt",
@@ -24,7 +24,7 @@ let mockedNotifications: list(User.Notification.t) = [
 ];
 
 let mockedNotification: User.Notification.t = {
-  id: 1,
+  id: "1",
   title: "Title",
   body: "Body",
   createdAt: "CreatedAt",
@@ -34,7 +34,7 @@ let mockedNotification: User.Notification.t = {
 };
 
 let mockedMessages: list(Message.t) = [
-  {id: 1, message: "Message", email: "email@provider.com"},
+  {id: "1", message: "Message", email: "email@provider.com"},
 ];
 
 let role =
@@ -101,7 +101,7 @@ let notification =
           field(
             "id",
             ~doc="Unique notification identifier",
-            ~typ=non_null(int),
+            ~typ=non_null(guid),
             ~args=Arg.[],
             ~resolve=(_info, p) =>
             p.id
@@ -174,7 +174,7 @@ let user =
           field(
             "id",
             ~doc="Unique user identifier",
-            ~typ=non_null(int),
+            ~typ=non_null(guid),
             ~args=Arg.[],
             ~resolve=(_info, p) =>
             p.id
@@ -236,6 +236,7 @@ let schema =
         AddOrganizationProjectMutation.addOrganizationProject,
         UpdateOrganizationProjectNameMutation.updateOrganizationProjectName,
         RemoveOrganizationProjectMutation.removeOrganizationProject,
+        RecreateProjectWebhookMutation.recreateProjectWebhook,
       ],
     )
   );

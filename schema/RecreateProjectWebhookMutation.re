@@ -1,28 +1,22 @@
 open Graphql_lwt;
 open GraphqlHelpers;
 
-type updateOrganizationProjectNameInput = {
-  projectId: string,
-  name: string,
-};
+type recreateProjectWebhookInput = {projectId: string};
 
-let updateOrganizationProjectNameInput =
+let recreateProjectWebhookInput =
   Schema.Arg.(
     obj(
-      "UpdateOrganizationProjectNameInput",
-      ~fields=[
-        arg("projectId", ~typ=non_null(guid)),
-        arg("name", ~typ=non_null(string)),
-      ],
-      ~coerce=(projectId, name) =>
-      {projectId, name}
+      "RecreateProjectWebhookInput",
+      ~fields=[arg("projectId", ~typ=non_null(guid))],
+      ~coerce=projectId =>
+      projectId
     )
   );
 
 let payload =
   Schema.(
     obj(
-      "UpdateOrganizationProjectNamePayload",
+      "RecreateProjectWebhookPayload",
       ~fields=(
                 _:
                   Graphql_lwt.Schema.typ(
@@ -42,19 +36,19 @@ let payload =
           "project",
           ~typ=Organization.Project.resolver,
           ~args=Arg.[],
-          ~resolve=(_: Context.t, (_, project)) =>
-          project
+          ~resolve=(_: Context.t, (_, organization)) =>
+          organization
         ),
       ]
     )
   );
 
-let updateOrganizationProjectName =
+let recreateProjectWebhook =
   Schema.(
     io_field(
-      "updateOrganizationProjectName",
+      "recreateProjectWebhook",
       ~typ=non_null(payload),
-      ~args=Arg.[arg("input", ~typ=non_null(updateOrganizationProjectNameInput))],
+      ~args=Arg.[arg("input", ~typ=non_null(recreateProjectWebhookInput))],
       ~resolve=(info, (), _input) =>
       switch (info.user) {
       | Some(user) => Lwt.return(Ok((None, None)))

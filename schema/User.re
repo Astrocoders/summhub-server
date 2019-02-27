@@ -11,7 +11,7 @@ module Summary = {
 
 module Notification = {
   type t = {
-    id: int,
+    id: string,
     title: string,
     body: string,
     createdAt: string,
@@ -26,7 +26,7 @@ type role =
   | Admin;
 
 type t = {
-  id: int,
+  id: string,
   name: string,
   role,
 };

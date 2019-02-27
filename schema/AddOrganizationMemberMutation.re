@@ -2,7 +2,7 @@ open Graphql_lwt;
 open GraphqlHelpers;
 
 type addOrganizationMemberInput = {
-  organizationId: int,
+  organizationId: string,
   email: string,
 };
 
@@ -11,7 +11,7 @@ let addOrganizationMemberInput =
     obj(
       "AddOrganizationMemberInput",
       ~fields=[
-        arg("organizationId", ~typ=non_null(int)),
+        arg("organizationId", ~typ=non_null(guid)),
         arg("email", ~typ=non_null(string)),
       ],
       ~coerce=(organizationId, email) =>

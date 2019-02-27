@@ -9,3 +9,4 @@ _esy/
 summarize.install
 .DS_Store
 *.install
+.idea/

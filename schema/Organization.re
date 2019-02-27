@@ -3,7 +3,7 @@ open GraphqlHelpers;
 
 module Project = {
   type t = {
-    id: int,
+    id: string,
     name: string,
     webhook: string,
   };
@@ -12,7 +12,7 @@ module Project = {
     Schema.(
       obj("Project", ~doc="Project of an organization", ~fields=_ =>
         [
-          field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(_info, p: t) =>
+          field("id", ~typ=non_null(guid), ~args=Arg.[], ~resolve=(_info, p: t) =>
             p.id
           ),
           field(
@@ -45,7 +45,7 @@ module Project = {
 
 module Member = {
   type t = {
-    id: int,
+    id: string,
     email: string,
   };
 
@@ -53,7 +53,7 @@ module Member = {
     Schema.(
       obj("Member", ~doc="Member of an organization", ~fields=_ =>
         [
-          field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(_info, p) =>
+          field("id", ~typ=non_null(guid), ~args=Arg.[], ~resolve=(_info, p) =>
             p.id
           ),
           field(
@@ -75,7 +75,7 @@ module Member = {
 };
 
 type t = {
-  id: int,
+  id: string,
   name: string,
   createdAt: string,
 };
@@ -86,7 +86,7 @@ let resolver =
       [
         field(
           "id",
-          ~typ=non_null(int),
+          ~typ=non_null(guid),
           ~args=Arg.[],
           ~resolve=(_info: Context.t, p: t) =>
           p.id

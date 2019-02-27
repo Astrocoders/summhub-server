@@ -1,13 +1,14 @@
 open Graphql_lwt;
 
-let payload =
-  Schema.(
-    obj("ErrorPayload", ~fields=_ =>
-      [
-        field("error", ~typ=string, ~args=Arg.[], ~resolve=(_: Context.t, error) =>
-          error
-        ),
-      ]
+type requestSignInLinkInput = {email: string};
+
+let requestSignInLinkInput =
+  Schema.Arg.(
+    obj(
+      "RequestSignInLinkInput",
+      ~fields=[arg("email", ~typ=non_null(string))],
+      ~coerce=email =>
+      {email}
     )
   );
 
@@ -15,9 +16,9 @@ let requestSignInLink =
   Schema.(
     io_field(
       "requestSignInLink",
-      ~typ=non_null(payload),
-      ~args=Arg.[arg("email", ~typ=non_null(string))],
-      ~resolve=(_, (), email) =>
+      ~typ=non_null(GraphqlTypes.errorPayloadType),
+      ~args=Arg.[arg("input", ~typ=non_null(requestSignInLinkInput))],
+      ~resolve=(_, (), input) =>
       Lwt.return(Ok(None))
     )
   );

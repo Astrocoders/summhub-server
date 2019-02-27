@@ -1,6 +1,18 @@
 open Graphql_lwt;
 open GraphqlHelpers;
 
+type addOrganizationProjectInput = {organizationId: string};
+
+let addOrganizationProjectInput =
+  Schema.Arg.(
+    obj(
+      "AddOrganizationProjectInput",
+      ~fields=[arg("organizationId", ~typ=non_null(guid))],
+      ~coerce=organizationId =>
+      organizationId
+    )
+  );
+
 let payload =
   Schema.(
     obj(
@@ -38,7 +50,7 @@ let addOrganizationProject =
     io_field(
       "addOrganizationProject",
       ~typ=non_null(payload),
-      ~args=Arg.[arg("organizationId", ~typ=non_null(int))],
+      ~args=Arg.[arg("input", ~typ=non_null(addOrganizationProjectInput))],
       ~resolve=(info, (), _input) =>
       switch (info.user) {
       | Some(user) => Lwt.return(Ok((None, None)))

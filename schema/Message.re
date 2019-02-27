@@ -2,7 +2,7 @@ open Graphql_lwt;
 open GraphqlHelpers;
 
 type t = {
-  id: int,
+  id: string,
   email: string,
   message: string,
 };
@@ -14,7 +14,7 @@ let resolver =
         field(
           "id",
           ~doc="Unique identifier of message",
-          ~typ=non_null(int),
+          ~typ=non_null(guid),
           ~args=Arg.[],
           ~resolve=(_info: Context.t, p) =>
           p.id

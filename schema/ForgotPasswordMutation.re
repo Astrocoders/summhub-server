@@ -1,15 +1,14 @@
 open Graphql_lwt;
 
-let forgotPasswordPayload =
-  Schema.(
+type forgotPasswordInput = {email: string};
+
+let forgotPasswordInput =
+  Schema.Arg.(
     obj(
-      "ForgotPasswordPayload",
-      ~fields=(_: Graphql_lwt.Schema.typ(Context.t, option(option(string)))) =>
-      [
-        field("error", ~typ=string, ~args=Arg.[], ~resolve=(_, error) =>
-          error
-        ),
-      ]
+      "ForgotPasswordInput",
+      ~fields=[arg("email", ~typ=non_null(string))],
+      ~coerce=email =>
+      {email}
     )
   );
 
@@ -17,9 +16,9 @@ let forgotPassword =
   Schema.(
     io_field(
       "forgotPassword",
-      ~typ=non_null(forgotPasswordPayload),
-      ~args=Arg.[arg("email", ~typ=non_null(string))],
-      ~resolve=(_, (), _email) =>
+      ~typ=non_null(GraphqlTypes.errorPayloadType),
+      ~args=Arg.[arg("input", ~typ=non_null(forgotPasswordInput))],
+      ~resolve=(_, (), _input) =>
       Lwt.return(Ok(None))
     )
   );
