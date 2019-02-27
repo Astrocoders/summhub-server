@@ -12,21 +12,21 @@ module Project = {
     Schema.(
       obj("Project", ~doc="Project of an organization", ~fields=_ =>
         [
-          field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(info, p: t) =>
+          field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(_info, p: t) =>
             p.id
           ),
           field(
             "name",
             ~typ=non_null(string),
             ~args=Arg.[],
-            ~resolve=(info, p: t) =>
+            ~resolve=(_info, p: t) =>
             p.name
           ),
           field(
             "webhook",
             ~typ=non_null(string),
             ~args=Arg.[],
-            ~resolve=(info, p: t) =>
+            ~resolve=(_info, p: t) =>
             p.webhook
           ),
         ]
@@ -40,7 +40,7 @@ module Project = {
     let nodeName = "Project";
   };
 
-  module Connection = Connection.Create(Config);
+  module Connection = Connection.Make(Config);
 };
 
 module Member = {
@@ -53,11 +53,11 @@ module Member = {
     Schema.(
       obj("Member", ~doc="Member of an organization", ~fields=_ =>
         [
-          field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(info, p) =>
+          field("id", ~typ=non_null(int), ~args=Arg.[], ~resolve=(_info, p) =>
             p.id
           ),
           field(
-            "email", ~typ=non_null(string), ~args=Arg.[], ~resolve=(info, p) =>
+            "email", ~typ=non_null(string), ~args=Arg.[], ~resolve=(_info, p) =>
             p.email
           ),
         ]
@@ -71,7 +71,7 @@ module Member = {
     let nodeName = "Member";
   };
 
-  module Connection = Connection.Create(Config);
+  module Connection = Connection.Make(Config);
 };
 
 type t = {
@@ -88,29 +88,29 @@ let resolver =
           "id",
           ~typ=non_null(int),
           ~args=Arg.[],
-          ~resolve=(info: Context.t, p: t) =>
+          ~resolve=(_info: Context.t, p: t) =>
           p.id
         ),
         field(
           "name",
           ~typ=non_null(string),
           ~args=Arg.[],
-          ~resolve=(info: Context.t, p: t) =>
+          ~resolve=(_info: Context.t, p: t) =>
           p.name
         ),
         field(
           "createdAt",
           ~typ=non_null(string),
           ~args=Arg.[],
-          ~resolve=(info: Context.t, p: t) =>
+          ~resolve=(_info: Context.t, p: t) =>
           p.createdAt
         ),
         Member.Connection.connectionResolver(
-          "members", (_info, p, first, after, last, before) =>
+          "members", (_info, _p, _first, _after, _last, _before) =>
           None
         ),
         Project.Connection.connectionResolver(
-          "projects", (_info, p, first, after, last, before) =>
+          "projects", (_info, _p, _first, _after, _last, _before) =>
           None
         ),
       ]
@@ -124,4 +124,4 @@ module Config = {
   let nodeName = "Organization";
 };
 
-module Connection = Connection.Create(Config);
+module Connection = Connection.Make(Config);

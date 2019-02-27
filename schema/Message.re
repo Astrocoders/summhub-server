@@ -16,7 +16,7 @@ let resolver =
           ~doc="Unique identifier of message",
           ~typ=non_null(int),
           ~args=Arg.[],
-          ~resolve=(info: Context.t, p) =>
+          ~resolve=(_info: Context.t, p) =>
           p.id
         ),
         field(
@@ -24,7 +24,7 @@ let resolver =
           ~doc="Unique identifier of message",
           ~typ=non_null(string),
           ~args=Arg.[],
-          ~resolve=(info, p) =>
+          ~resolve=(_info, p) =>
           p.email
         ),
         field(
@@ -32,7 +32,7 @@ let resolver =
           ~doc="Unique identifier of message",
           ~typ=non_null(string),
           ~args=Arg.[],
-          ~resolve=(info, p) =>
+          ~resolve=(_info, p) =>
           p.message
         ),
       ]
@@ -46,4 +46,4 @@ module Config = {
   let nodeName = "Message";
 };
 
-module Connection = Connection.Create(Config);
+module Connection = Connection.Make(Config);
