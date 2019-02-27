@@ -229,6 +229,7 @@ let schema =
         RequestSignInLinkMutation.requestSignInLink,
         SendMessageMutation.sendMessage,
         CreateOrganizationMutation.createOrganization,
+        RemoveOrganizationMutation.removeOrganization,
       ],
     )
   );
