@@ -234,6 +234,7 @@ let schema =
         AddOrganizationMemberMutation.addOrganizationMember,
         RemoveOrganizationMemberMutation.removeOrganizationMember,
         AddOrganizationProjectMutation.addOrganizationProject,
+        UpdateOrganizationProjectNameMutation.updateOrganizationProjectName,
       ],
     )
   );
