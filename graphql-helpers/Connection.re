@@ -7,7 +7,7 @@ module type Config = {
   let nodeName: string;
 };
 
-module Create = (Config: Config) => {
+module Make = (Config: Config) => {
   module PageInfo = {
     type t = {
       startCursor: option(string),

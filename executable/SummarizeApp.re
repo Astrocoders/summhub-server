@@ -33,7 +33,7 @@ let mockedNotification: User.Notification.t = {
   payload: "Payload",
 };
 
-let mockedMessages: list(User.Message.t) = [
+let mockedMessages: list(Message.t) = [
   {id: 1, message: "Message", email: "email@provider.com"},
 ];
 
@@ -61,7 +61,7 @@ let summary =
             ~doc="Count of unread items",
             ~typ=non_null(int),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.unread
           ),
           field(
@@ -69,7 +69,7 @@ let summary =
             ~doc="Total of notifications",
             ~typ=non_null(int),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.total
           ),
           field(
@@ -77,7 +77,7 @@ let summary =
             ~doc="Total of projects",
             ~typ=non_null(int),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.projects
           ),
           field(
@@ -85,56 +85,13 @@ let summary =
             ~doc="Total of organizations",
             ~typ=non_null(int),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.organizations
           ),
         ]
       )
     )
   );
-
-let message =
-  User.Message.(
-    Schema.(
-      obj("Message", ~doc="User notification message", ~fields=_ =>
-        [
-          field(
-            "id",
-            ~doc="Unique identifier of message",
-            ~typ=non_null(int),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.id
-          ),
-          field(
-            "email",
-            ~doc="Unique identifier of message",
-            ~typ=non_null(string),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.email
-          ),
-          field(
-            "message",
-            ~doc="Unique identifier of message",
-            ~typ=non_null(string),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.message
-          ),
-        ]
-      )
-    )
-  );
-
-module MessageConfig = {
-  type nodeType = User.Message.t;
-  type context = Context.t;
-  let nodeResolver = message;
-  let nodeName = "Message";
-};
-
-module MessageConnection = Connection.Create(MessageConfig);
 
 let notification =
   User.Notification.(
@@ -146,7 +103,7 @@ let notification =
             ~doc="Unique notification identifier",
             ~typ=non_null(int),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.id
           ),
           field(
@@ -154,7 +111,7 @@ let notification =
             ~doc="Title notification",
             ~typ=non_null(string),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.title
           ),
           field(
@@ -162,30 +119,30 @@ let notification =
             ~doc="Body notification",
             ~typ=non_null(string),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.body
           ),
           field(
             "createdAt",
             ~typ=non_null(string),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.createdAt
           ),
-          field("icon", ~typ=string, ~args=Arg.[], ~resolve=(info, p) =>
+          field("icon", ~typ=string, ~args=Arg.[], ~resolve=(_info, p) =>
             p.icon
           ),
-          field("link", ~typ=string, ~args=Arg.[], ~resolve=(info, p) =>
+          field("link", ~typ=string, ~args=Arg.[], ~resolve=(_info, p) =>
             p.link
           ),
           field(
             "payload",
             ~typ=non_null(string),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.payload
           ),
-          MessageConnection.connectionResolver(
+          Message.Connection.connectionResolver(
             "messages", (_info, p, first, after, last, before) =>
             None
           ),
@@ -219,33 +176,33 @@ let user =
             ~doc="Unique user identifier",
             ~typ=non_null(int),
             ~args=Arg.[],
-            ~resolve=(info, p) =>
+            ~resolve=(_info, p) =>
             p.id
           ),
           field(
-            "name", ~args=Arg.[], ~typ=non_null(string), ~resolve=(info, p) =>
+            "name", ~args=Arg.[], ~typ=non_null(string), ~resolve=(_info, p) =>
             p.name
           ),
           field(
-            "role", ~args=Arg.[], ~typ=non_null(role), ~resolve=(info, p) =>
+            "role", ~args=Arg.[], ~typ=non_null(role), ~resolve=(_info, p) =>
             p.role
           ),
           field(
             "summary",
             ~args=Arg.[],
             ~typ=non_null(summary),
-            ~resolve=(info, p) =>
+            ~resolve=(_info, _p) =>
             mockedSummary
           ),
           field(
             "notifications",
             ~args=Arg.[arg("filter", ~typ=notificationsArg)],
             ~typ=list(non_null(notification)),
-            ~resolve=(_info, p, filter) =>
+            ~resolve=(_info, _p, _filter) =>
             None
           ),
           Organization.Connection.connectionResolver(
-            "organizations", (_info, p, first, after, last, before) =>
+            "organizations", (_info, _p, _first, _after, _last, _before) =>
             None
           ),
         ]
@@ -270,6 +227,7 @@ let schema =
         ForgotPasswordMutation.forgotPassword,
         ResetPasswordMutation.resetPassword,
         RequestSignInLinkMutation.requestSignInLink,
+        SendMessageMutation.sendMessage,
       ],
     )
   );

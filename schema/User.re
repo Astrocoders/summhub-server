@@ -1,17 +1,11 @@
+open Graphql_lwt;
+
 module Summary = {
   type t = {
     unread: int,
     total: int,
     projects: int,
     organizations: int,
-  };
-};
-
-module Message = {
-  type t = {
-    id: int,
-    email: string,
-    message: string,
   };
 };
 
