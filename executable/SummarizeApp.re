@@ -33,7 +33,7 @@ let mockedNotification: User.Notification.t = {
   payload: "Payload",
 };
 
-let mockedMessages: list(User.Message.t) = [
+let mockedMessages: list(Message.t) = [
   {id: 1, message: "Message", email: "email@provider.com"},
 ];
 
@@ -93,49 +93,6 @@ let summary =
     )
   );
 
-let message =
-  User.Message.(
-    Schema.(
-      obj("Message", ~doc="User notification message", ~fields=_ =>
-        [
-          field(
-            "id",
-            ~doc="Unique identifier of message",
-            ~typ=non_null(int),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.id
-          ),
-          field(
-            "email",
-            ~doc="Unique identifier of message",
-            ~typ=non_null(string),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.email
-          ),
-          field(
-            "message",
-            ~doc="Unique identifier of message",
-            ~typ=non_null(string),
-            ~args=Arg.[],
-            ~resolve=(info, p) =>
-            p.message
-          ),
-        ]
-      )
-    )
-  );
-
-module MessageConfig = {
-  type nodeType = User.Message.t;
-  type context = Context.t;
-  let nodeResolver = message;
-  let nodeName = "Message";
-};
-
-module MessageConnection = Connection.Create(MessageConfig);
-
 let notification =
   User.Notification.(
     Schema.(
@@ -185,7 +142,7 @@ let notification =
             ~resolve=(info, p) =>
             p.payload
           ),
-          MessageConnection.connectionResolver(
+          Message.Connection.connectionResolver(
             "messages", (_info, p, first, after, last, before) =>
             None
           ),
@@ -270,6 +227,7 @@ let schema =
         ForgotPasswordMutation.forgotPassword,
         ResetPasswordMutation.resetPassword,
         RequestSignInLinkMutation.requestSignInLink,
+        SendMessageMutation.sendMessage,
       ],
     )
   );
