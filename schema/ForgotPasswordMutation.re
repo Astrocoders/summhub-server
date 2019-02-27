@@ -16,7 +16,7 @@ let forgotPassword =
   Schema.(
     io_field(
       "forgotPassword",
-      ~typ=non_null(GraphqlTypes.errorPayload),
+      ~typ=non_null(GraphqlTypes.errorPayloadType),
       ~args=Arg.[arg("input", ~typ=non_null(forgotPasswordInput))],
       ~resolve=(_, (), _input) =>
       Lwt.return(Ok(None))

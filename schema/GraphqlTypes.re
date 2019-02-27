@@ -1,6 +1,6 @@
 open Graphql_lwt;
 
-let errorPayload =
+let errorPayloadType =
   Schema.(
     obj(
       "ErrorPayload",

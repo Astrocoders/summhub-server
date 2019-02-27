@@ -1,13 +1,13 @@
 open Graphql_lwt;
 open GraphqlHelpers;
 
-type addOrganizationProjectInput = {organizationId: int};
+type addOrganizationProjectInput = {organizationId: string};
 
 let addOrganizationProjectInput =
   Schema.Arg.(
     obj(
       "AddOrganizationProjectInput",
-      ~fields=[arg("organizationId", ~typ=non_null(int))],
+      ~fields=[arg("organizationId", ~typ=non_null(guid))],
       ~coerce=organizationId =>
       organizationId
     )

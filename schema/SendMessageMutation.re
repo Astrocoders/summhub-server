@@ -2,7 +2,7 @@ open Graphql_lwt;
 open GraphqlHelpers;
 
 type sendMessageInput = {
-  notificationId: int,
+  notificationId: string,
   message: string,
 };
 
@@ -11,7 +11,7 @@ let sendMessageInput =
     obj(
       "SendMessageInput",
       ~fields=[
-        arg("notificationId", ~typ=non_null(int)),
+        arg("notificationId", ~typ=non_null(guid)),
         arg("message", ~typ=non_null(string)),
       ],
       ~coerce=(notificationId, message) =>

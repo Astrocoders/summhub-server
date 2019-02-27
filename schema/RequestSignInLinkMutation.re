@@ -16,7 +16,7 @@ let requestSignInLink =
   Schema.(
     io_field(
       "requestSignInLink",
-      ~typ=non_null(GraphqlTypes.errorPayload),
+      ~typ=non_null(GraphqlTypes.errorPayloadType),
       ~args=Arg.[arg("input", ~typ=non_null(requestSignInLinkInput))],
       ~resolve=(_, (), input) =>
       Lwt.return(Ok(None))

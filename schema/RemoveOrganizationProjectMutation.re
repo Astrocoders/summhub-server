@@ -2,8 +2,8 @@ open Graphql_lwt;
 open GraphqlHelpers;
 
 type removeOrganizationProjectInput = {
-  organizationId: int,
-  projectId: int,
+  organizationId: string,
+  projectId: string,
 };
 
 let removeOrganizationProjectInput =
@@ -11,8 +11,8 @@ let removeOrganizationProjectInput =
     obj(
       "RemoveOrganizationProjectInput",
       ~fields=[
-        arg("organizationId", ~typ=non_null(int)),
-        arg("projectId", ~typ=non_null(int)),
+        arg("organizationId", ~typ=non_null(guid)),
+        arg("projectId", ~typ=non_null(guid)),
       ],
       ~coerce=(organizationId, projectId) =>
       {organizationId, projectId}
@@ -23,7 +23,7 @@ let removeOrganizationProject =
   Schema.(
     io_field(
       "removeOrganizationProject",
-      ~typ=non_null(GraphqlTypes.errorPayload),
+      ~typ=non_null(GraphqlTypes.errorPayloadType),
       ~args=
         Arg.[arg("input", ~typ=non_null(removeOrganizationProjectInput))],
       ~resolve=(info, (), _input) =>

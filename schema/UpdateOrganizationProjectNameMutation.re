@@ -2,7 +2,7 @@ open Graphql_lwt;
 open GraphqlHelpers;
 
 type updateOrganizationProjectNameInput = {
-  projectId: int,
+  projectId: string,
   name: string,
 };
 
@@ -11,7 +11,7 @@ let updateOrganizationProjectNameInput =
     obj(
       "UpdateOrganizationProjectNameInput",
       ~fields=[
-        arg("projectId", ~typ=non_null(int)),
+        arg("projectId", ~typ=non_null(guid)),
         arg("name", ~typ=non_null(string)),
       ],
       ~coerce=(projectId, name) =>

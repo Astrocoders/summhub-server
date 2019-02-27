@@ -1,13 +1,13 @@
 open Graphql_lwt;
 open GraphqlHelpers;
 
-type recreateProjectWebhookInput = {projectId: int};
+type recreateProjectWebhookInput = {projectId: string};
 
 let recreateProjectWebhookInput =
   Schema.Arg.(
     obj(
       "RecreateProjectWebhookInput",
-      ~fields=[arg("projectId", ~typ=non_null(int))],
+      ~fields=[arg("projectId", ~typ=non_null(guid))],
       ~coerce=projectId =>
       projectId
     )
