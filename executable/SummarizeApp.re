@@ -236,6 +236,7 @@ let schema =
         AddOrganizationProjectMutation.addOrganizationProject,
         UpdateOrganizationProjectNameMutation.updateOrganizationProjectName,
         RemoveOrganizationProjectMutation.removeOrganizationProject,
+        RecreateProjectWebhookMutation.recreateProjectWebhook,
       ],
     )
   );
