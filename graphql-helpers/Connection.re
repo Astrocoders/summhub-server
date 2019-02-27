@@ -128,7 +128,11 @@ module Create = (Config: Config) => {
       ~typ=connectionType,
       ~args=
         Schema.Arg.[
-          ...args
+          arg("first", ~typ=float),
+          arg("after", ~typ=string),
+          arg("last", ~typ=int),
+          arg("before", ~typ=string),
+          ...args,
         ],
       ~resolve=cb,
     );
