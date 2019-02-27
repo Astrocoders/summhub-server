@@ -19,27 +19,11 @@ let removeOrganizationProjectInput =
     )
   );
 
-let payload =
-  Schema.(
-    obj(
-      "ErrorPayload",
-      ~fields=(
-                _: Graphql_lwt.Schema.typ(Context.t, option(option(string))),
-              ) =>
-      [
-        field(
-          "error", ~typ=string, ~args=Arg.[], ~resolve=(_: Context.t, error) =>
-          error
-        ),
-      ]
-    )
-  );
-
 let removeOrganizationProject =
   Schema.(
     io_field(
       "removeOrganizationProject",
-      ~typ=non_null(payload),
+      ~typ=non_null(GraphqlTypes.errorPayload),
       ~args=
         Arg.[arg("input", ~typ=non_null(removeOrganizationProjectInput))],
       ~resolve=(info, (), _input) =>

@@ -1,15 +1,15 @@
 open Graphql_lwt;
 open GraphqlHelpers;
 
-let payload =
-  Schema.(
-    obj("ErrorPayload", ~fields=_ =>
-      [
-        field(
-          "error", ~typ=string, ~args=Arg.[], ~resolve=(_: Context.t, error) =>
-          error
-        ),
-      ]
+type removeOrganizationInput = {organizationId: int};
+
+let removeOrganizationInput =
+  Schema.Arg.(
+    obj(
+      "RemoveOrganizationInput",
+      ~fields=[arg("organizationId", ~typ=non_null(int))],
+      ~coerce=organizationId =>
+      organizationId
     )
   );
 
@@ -17,9 +17,9 @@ let removeOrganization =
   Schema.(
     io_field(
       "removeOrganization",
-      ~typ=non_null(payload),
-      ~args=Arg.[arg("companyId", ~typ=non_null(int))],
-      ~resolve=(info, (), companyId) =>
+      ~typ=non_null(GraphqlTypes.errorPayload),
+      ~args=Arg.[arg("input", ~typ=non_null(removeOrganizationInput))],
+      ~resolve=(info, (), _input) =>
       switch (info.user) {
       | Some(user) => Lwt.return(Ok(None))
       | None => Lwt.return(Ok(Some(Errors.unauthorized)))
