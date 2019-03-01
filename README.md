@@ -35,7 +35,7 @@ Install `sqitch` https://sqitch.org/
 Then on the root of the project run:
 
 ```
-sqitch deploy
+sqitch deploy db:pg:database_name
 ```
 
 ## Developing:
@@ -52,7 +52,7 @@ esy build
 After building the project, you can run the main binary that is produced.
 
 ```
-esy x SummarizeApp.exe 
+esy x SummarizeApp.exe
 ```
 
 ## Running Tests:
