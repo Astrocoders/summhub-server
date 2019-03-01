@@ -7,5 +7,5 @@
    (name GraphqlHelpers)
    ; Other libraries list this name in their package.json 'require' field to use this library.
    (public_name summarize.graphql-helpers)
-   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix )
+   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix summarize.lib )
 )
