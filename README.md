@@ -24,6 +24,20 @@ summarize@0.0.0
     require: summarize.lib
 ```
 
+## Setup Database
+
+Set your `DATABASE_URL` on `.env`
+
+Set your database config o `sqitch.conf`
+
+Install `sqitch` https://sqitch.org/
+
+Then on the root of the project run:
+
+```
+sqitch deploy db:pg:database_name
+```
+
 ## Developing:
 
 ```
@@ -38,7 +52,7 @@ esy build
 After building the project, you can run the main binary that is produced.
 
 ```
-esy x SummarizeApp.exe 
+esy x SummarizeApp.exe
 ```
 
 ## Running Tests:
@@ -47,3 +61,11 @@ esy x SummarizeApp.exe
 # Runs the "test" command in `package.json`.
 esy test
 ```
+
+## Adding Migrations
+
+```
+sqitch add file_name
+```
+
+Then edit the generated files with the information's of: deploy changes, validation and rollback

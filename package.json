@@ -4,7 +4,7 @@
   "description": "My Project",
   "esy": {
     "build": "pesy",
-    "release": { "releasedBinaries": [ "SummarizeApp.exe" ] }
+    "release": { "releasedBinaries": [ "Server.exe" ] }
   },
   "buildDirs": {
     "test": {
@@ -12,13 +12,22 @@
       "main": "TestSummarize",
       "name": "TestSummarize.exe"
     },
-    "library": { "name": "summarize.lib", "namespace": "Summarize" },
+    "library": {
+      "name": "summarize.lib",
+      "namespace": "Library",
+      "require": [
+        "ezpostgresql", "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str",
+        "pastel.lib", "console.lib", "graphql-lwt", "graphql-cohttp",
+        "cohttp-lwt-unix"
+      ],
+      "preprocess": [ "pps", "lwt_ppx" ]
+    },
     "graphql-helpers": {
       "name": "summarize.graphql-helpers",
       "namespace": "GraphqlHelpers",
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
-        "graphql-cohttp", "cohttp-lwt-unix"
+        "graphql-cohttp", "cohttp-lwt-unix", "summarize.lib"
       ]
     },
     "schema": {
@@ -26,20 +35,24 @@
       "namespace": "AppSchema",
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
-        "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers"
+        "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers",
+        "ezpostgresql", "summarize.lib"
       ]
     },
     "executable": {
       "require": [
-        "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
-        "graphql-cohttp", "cohttp-lwt-unix", "summarize.lib", "summarize.schema", "summarize.graphql-helpers"
+        "lwt", "lwt.unix", "str", "ppx_let", "lwt_ppx", "pastel.lib",
+        "console.lib", "graphql-lwt", "graphql-cohttp", "cohttp-lwt-unix",
+        "summarize.lib", "summarize.schema", "summarize.graphql-helpers",
+        "ezpostgresql", "jwt"
       ],
-      "main": "SummarizeApp",
-      "name": "SummarizeApp.exe"
+      "main": "Server",
+      "name": "Server.exe",
+      "preprocess": [ "pps", "lwt_ppx" ]
     }
   },
   "scripts": {
-    "start": "esy b && esy x SummarizeApp.exe",
+    "start": "esy b && env $(cat .env | xargs) esy x Server.exe",
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
     "test": "esy x TestSummarize.exe"
   },
@@ -49,12 +62,14 @@
     "@opam/dune": ">=1.6.0",
     "@opam/graphql-cohttp": "0.8.0",
     "@opam/graphql-lwt": "0.8.0",
+    "@opam/jwt": "0.1",
     "@opam/jwto": "0.1.4",
     "@opam/lwt": "4.1.0",
     "@opam/lwt_ppx": "1.2.1",
     "@opam/ppx_let": "v0.11.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
+    "ezpostgresql": "bobbypriambodo/ezpostgresql:ezpostgresql.opam#master",
     "ocaml": "^4.4.0",
     "pesy": "*",
     "refmterr": "*"

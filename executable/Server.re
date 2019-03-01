@@ -1,6 +1,7 @@
 open Graphql_lwt;
 open AppSchema;
 open GraphqlHelpers;
+open Library;
 
 let mockedSummary: User.Summary.t = {
   unread: 1,
@@ -249,7 +250,35 @@ let _ =
     {
       let callback =
         Graphql_cohttp_lwt.make_callback(
-          _req => Context.{user: Some(mockedUser)},
+          req =>
+            Lwt_main.run(
+              {
+                let connection = Database.pool;
+                let%lwt user = {
+                  Cohttp.Header.get(req.headers, "token")
+                  |> (
+                    fun
+                    | None => Lwt.return(None)
+                    | Some(token) => {
+                        let userId =
+                          Jwt.(
+                            t_of_token(token)
+                            |> payload_of_t
+                            |> string_of_payload
+                          );
+                        let%lwt user =
+                          User.Model.findOne(
+                            ~connection,
+                            ~clause="id=" ++ "'" ++ userId ++ "'",
+                            (),
+                          );
+                        Lwt.return(user);
+                      }
+                  );
+                };
+                Lwt.return(Context.{user, connection});
+              },
+            ),
           schema,
         );
       let server = Cohttp_lwt_unix.Server.make(~callback, ());

@@ -10,3 +10,4 @@ summarize.install
 .DS_Store
 *.install
 .idea/
+.env
