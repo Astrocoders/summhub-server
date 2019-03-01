@@ -1,4 +1,5 @@
 BEGIN;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 create table app_users (
   id uuid default uuid_generate_v4() not null constraint app_users_pkey primary key,
   name varchar(150) not null,
