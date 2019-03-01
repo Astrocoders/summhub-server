@@ -4,7 +4,7 @@
   "description": "My Project",
   "esy": {
     "build": "pesy",
-    "release": { "releasedBinaries": [ "SummarizeApp.exe" ] }
+    "release": { "releasedBinaries": [ "Server.exe" ] }
   },
   "buildDirs": {
     "test": {
@@ -46,13 +46,13 @@
         "summarize.lib", "summarize.schema", "summarize.graphql-helpers",
         "ezpostgresql", "jwt"
       ],
-      "main": "SummarizeApp",
-      "name": "SummarizeApp.exe",
+      "main": "Server",
+      "name": "Server.exe",
       "preprocess": [ "pps", "lwt_ppx" ]
     }
   },
   "scripts": {
-    "start": "esy b && esy x SummarizeApp.exe",
+    "start": "esy b && env $(cat .env | xargs) esy x Server.exe",
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
     "test": "esy x TestSummarize.exe"
   },
