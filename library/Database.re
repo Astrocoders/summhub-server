@@ -1,7 +1,9 @@
 open Ezpostgresql;
 
+exception Database_not_configured;
+
 let conninfo =
   try (Sys.getenv("DATABASE_URL")) {
-  | Not_found => "postgresql://localhost:5432/summhub_dev"
+  | Not_found => raise(Database_not_configured)
   };
 let pool = Pool.create(~conninfo, ~size=10, ());

@@ -251,28 +251,34 @@ let _ =
       let callback =
         Graphql_cohttp_lwt.make_callback(
           req =>
-            Cohttp.Header.get(req.headers, "token")
-            |> (
-              headerToken => {
+            Lwt_main.run(
+              {
                 let connection = Database.pool;
-                switch (headerToken) {
-                | Some(token) =>
-                  let userId =
-                    Jwt.(
-                      t_of_token(token) |> payload_of_t |> string_of_payload
-                    );
-                  let%lwt user =
-                    User.Model.findOne(
-                      ~connection,
-                      ~clause="id=" ++ "'" ++ userId ++ "'",
-                      (),
-                    );
-                  Lwt.return(Context.{user, connection});
-                | None => Lwt.return(Context.{user: None, connection})
+                let%lwt user = {
+                  Cohttp.Header.get(req.headers, "token")
+                  |> (
+                    fun
+                    | None => Lwt.return(None)
+                    | Some(token) => {
+                        let userId =
+                          Jwt.(
+                            t_of_token(token)
+                            |> payload_of_t
+                            |> string_of_payload
+                          );
+                        let%lwt user =
+                          User.Model.findOne(
+                            ~connection,
+                            ~clause="id=" ++ "'" ++ userId ++ "'",
+                            (),
+                          );
+                        Lwt.return(user);
+                      }
+                  );
                 };
-              }
-            )
-            |> (result => Lwt_main.run(result)),
+                Lwt.return(Context.{user, connection});
+              },
+            ),
           schema,
         );
       let server = Cohttp_lwt_unix.Server.make(~callback, ());
