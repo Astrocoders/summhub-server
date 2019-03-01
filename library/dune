@@ -4,7 +4,9 @@
 ; !!!! If you want to stop using pesy and manage this file by hand, change pacakge.json's 'esy.build' command to: refmterr dune build -p  summarize
 (library
    ; The namespace that other packages/libraries will access this library through
-   (name Summarize)
+   (name Library)
    ; Other libraries list this name in their package.json 'require' field to use this library.
    (public_name summarize.lib)
+   (libraries  ezpostgresql lwt lwt.unix ppx_let lwt_ppx str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix )
+   (preprocess ( pps lwt_ppx ))  ; From package.json preprocess field
 )
