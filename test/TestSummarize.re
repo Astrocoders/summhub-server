@@ -1,2 +1,2 @@
-Summarize.Util.foo();
+Library.Util.foo();
 print_endline("Add Your Test Cases Here");
