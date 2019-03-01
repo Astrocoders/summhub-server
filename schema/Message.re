@@ -1,5 +1,6 @@
 open Graphql_lwt;
 open GraphqlHelpers;
+open Library;
 
 type t = {
   id: string,
@@ -16,7 +17,7 @@ let resolver =
           ~doc="Unique identifier of message",
           ~typ=non_null(guid),
           ~args=Arg.[],
-          ~resolve=(_info: Context.t, p) =>
+          ~resolve=(_info, p) =>
           p.id
         ),
         field(
@@ -47,3 +48,13 @@ module Config = {
 };
 
 module Connection = Connection.Make(Config);
+
+type message = t;
+
+module ModelConfig = {
+  type t = message;
+  let table = "messages";
+  let parseRow = row => {id: row[0], email: row[2], message: row[3]};
+};
+
+module Model = Model.Make(ModelConfig);
