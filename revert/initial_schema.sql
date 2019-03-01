@@ -1,15 +1,10 @@
 BEGIN;
 
-drop table members;
-
-drop table projects;
-
-drop table organizations;
-
-drop table messages;
-
-drop table notifications;
-
-drop table app_users;
+DROP	TABLE MEMBERS;
+DROP	TABLE PROJECTS;
+DROP	TABLE ORGANIZATIONS;
+DROP	TABLE MESSAGES;
+DROP	TABLE NOTIFICATIONS;
+DROP	TABLE APP_USERS;
 
 COMMIT;
