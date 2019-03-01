@@ -1,0 +1,4 @@
+%syntax-version=1.0.0
+%project=summhub
+
+initial_schema 2019-02-28T21:07:48Z Medson Oliveira Junior <medson@newgate.local> #    initial_schema\n     deploy/initial_schema.sql\n     revert/initial_schema.sql\n     verify/initial_schema.sql\n     
