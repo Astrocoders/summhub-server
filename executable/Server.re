@@ -128,7 +128,7 @@ let _ =
                     fun
                     | None => Lwt.return(None)
                     | Some(token) => {
-                        let userId = Util.decodeToken(token);
+                        let userId = Auth.decodeToken(token);
                         let%lwt user =
                           User.Model.findOne(
                             ~connection,
