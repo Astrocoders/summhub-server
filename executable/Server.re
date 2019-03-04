@@ -59,14 +59,14 @@ let userResolver =
           field(
             "summary",
             ~args=Arg.[],
-            ~typ=non_null(Summary.resolver),
+            ~typ=non_null(Summary.typ),
             ~resolve=(_info, _p) =>
             {unread: 0, total: 0, projects: 0, organizations: 0}
           ),
           field(
             "notifications",
             ~args=Arg.[arg("filter", ~typ=notificationsArg)],
-            ~typ=list(non_null(Notification.resolver)),
+            ~typ=list(non_null(Notification.typ)),
             ~resolve=(_info, _p, _filter) =>
             None
           ),
@@ -128,12 +128,7 @@ let _ =
                     fun
                     | None => Lwt.return(None)
                     | Some(token) => {
-                        let userId =
-                          Jwt.(
-                            t_of_token(token)
-                            |> payload_of_t
-                            |> string_of_payload
-                          );
+                        let userId = Util.decodeToken(token);
                         let%lwt user =
                           User.Model.findOne(
                             ~connection,
