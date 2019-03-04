@@ -18,7 +18,7 @@
       "require": [
         "ezpostgresql", "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str",
         "pastel.lib", "console.lib", "graphql-lwt", "graphql-cohttp",
-        "cohttp-lwt-unix"
+        "cohttp-lwt-unix", "jwt"
       ],
       "preprocess": [ "pps", "lwt_ppx" ]
     },
