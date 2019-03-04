@@ -8,7 +8,7 @@ type t = {
   webhook: string,
 };
 
-let resolver =
+let typ =
   Schema.(
     obj("Project", ~doc="Project of an organization", ~fields=_ =>
       [
@@ -33,7 +33,7 @@ let resolver =
 module Config = {
   type nodeType = t;
   type context = Context.t;
-  let nodeResolver = resolver;
+  let nodeResolver = typ;
   let nodeName = "Project";
 };
 

@@ -8,7 +8,7 @@ type t = {
   organizations: int,
 };
 
-let resolver =
+let typ =
   Schema.(
     obj("Summary", ~doc="User's summary of notifications", ~fields=_ =>
       [

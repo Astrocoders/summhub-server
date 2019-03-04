@@ -8,7 +8,7 @@ type t = {
   message: string,
 };
 
-let resolver =
+let typ =
   Schema.(
     obj("Message", ~doc="User notification message", ~fields=_ =>
       [
@@ -43,7 +43,7 @@ let resolver =
 module Config = {
   type nodeType = t;
   type context = Context.t;
-  let nodeResolver = resolver;
+  let nodeResolver = typ;
   let nodeName = "Message";
 };
 

@@ -7,7 +7,7 @@ type t = {
   email: string,
 };
 
-let resolver =
+let typ =
   Schema.(
     obj("Member", ~doc="Member of an organization", ~fields=_ =>
       [
@@ -25,7 +25,7 @@ let resolver =
 module Config = {
   type nodeType = t;
   type context = Context.t;
-  let nodeResolver = resolver;
+  let nodeResolver = typ;
   let nodeName = "Member";
 };
 

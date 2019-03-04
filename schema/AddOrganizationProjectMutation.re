@@ -34,7 +34,7 @@ let payload =
         ),
         field(
           "project",
-          ~typ=Project.resolver,
+          ~typ=Project.typ,
           ~args=Arg.[],
           ~resolve=(_: Context.t, (_, project)) =>
           project

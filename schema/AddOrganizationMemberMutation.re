@@ -40,7 +40,7 @@ let payload =
         ),
         field(
           "member",
-          ~typ=Member.resolver,
+          ~typ=Member.typ,
           ~args=Arg.[],
           ~resolve=(_: Context.t, (_, member)) =>
           member

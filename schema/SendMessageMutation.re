@@ -40,7 +40,7 @@ let payload =
         ),
         field(
           "message",
-          ~typ=Message.resolver,
+          ~typ=Message.typ,
           ~args=Arg.[],
           ~resolve=(_: Context.t, (_, message)) =>
           message

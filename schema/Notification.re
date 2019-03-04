@@ -12,7 +12,7 @@ type t = {
   payload: string,
 };
 
-let resolver =
+let typ =
   Schema.(
     obj("Notification", ~doc="User notification", ~fields=_ =>
       [

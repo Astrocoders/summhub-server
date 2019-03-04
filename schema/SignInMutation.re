@@ -41,7 +41,8 @@ let signIn =
       "signIn",
       ~typ=non_null(payload),
       ~args=Arg.[arg("input", ~typ=non_null(input))],
-      ~resolve=(_, (), (_email, _password)) =>
-      Lwt.return(Ok((None, None)))
+      ~resolve=(_, (), (_email, _password)) => {
+        Lwt.return(Ok((None, None)))
+      }
     )
   );
