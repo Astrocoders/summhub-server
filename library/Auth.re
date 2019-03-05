@@ -14,10 +14,7 @@ let decodeToken = token => {
 let encodeToken = userId => {
   open Jwt;
   let header = header_of_algorithm_and_typ(HS256(getTokenSecret()), "JWT");
-  let payload =
-    empty_payload
-    |> add_claim(iss, "summhub_server")
-    |> add_claim(sub, userId);
+  let payload = empty_payload |> add_claim(sub, userId);
   t_of_header_and_payload(header, payload) |> token_of_t;
 };
 
@@ -25,7 +22,7 @@ let validateToken = token => {
   open Jwt;
   let userId = decodeToken(token);
   let signature = encodeToken(userId) |> t_of_token |> signature_of_t;
-  let signatureJwt = (token |> t_of_token) |> signature_of_t;
+  let signatureJwt = token |> t_of_token |> signature_of_t;
 
   signatureJwt == signature;
 };
