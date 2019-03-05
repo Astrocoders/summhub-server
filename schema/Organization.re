@@ -1,78 +1,6 @@
 open Graphql_lwt;
 open GraphqlHelpers;
-
-module Project = {
-  type t = {
-    id: string,
-    name: string,
-    webhook: string,
-  };
-
-  let resolver =
-    Schema.(
-      obj("Project", ~doc="Project of an organization", ~fields=_ =>
-        [
-          field("id", ~typ=non_null(guid), ~args=Arg.[], ~resolve=(_info, p: t) =>
-            p.id
-          ),
-          field(
-            "name",
-            ~typ=non_null(string),
-            ~args=Arg.[],
-            ~resolve=(_info, p: t) =>
-            p.name
-          ),
-          field(
-            "webhook",
-            ~typ=non_null(string),
-            ~args=Arg.[],
-            ~resolve=(_info, p: t) =>
-            p.webhook
-          ),
-        ]
-      )
-    );
-
-  module Config = {
-    type nodeType = t;
-    type context = Context.t;
-    let nodeResolver = resolver;
-    let nodeName = "Project";
-  };
-
-  module Connection = Connection.Make(Config);
-};
-
-module Member = {
-  type t = {
-    id: string,
-    email: string,
-  };
-
-  let resolver =
-    Schema.(
-      obj("Member", ~doc="Member of an organization", ~fields=_ =>
-        [
-          field("id", ~typ=non_null(guid), ~args=Arg.[], ~resolve=(_info, p) =>
-            p.id
-          ),
-          field(
-            "email", ~typ=non_null(string), ~args=Arg.[], ~resolve=(_info, p) =>
-            p.email
-          ),
-        ]
-      )
-    );
-
-  module Config = {
-    type nodeType = t;
-    type context = Context.t;
-    let nodeResolver = resolver;
-    let nodeName = "Member";
-  };
-
-  module Connection = Connection.Make(Config);
-};
+open Library;
 
 type t = {
   id: string,
@@ -80,7 +8,7 @@ type t = {
   createdAt: string,
 };
 
-let resolver =
+let typ =
   Schema.(
     obj("Organization", ~doc="User organization", ~fields=_ =>
       [
@@ -120,8 +48,22 @@ let resolver =
 module Config = {
   type nodeType = t;
   type context = Context.t;
-  let nodeResolver = resolver;
+  let nodeResolver = typ;
   let nodeName = "Organization";
 };
 
 module Connection = Connection.Make(Config);
+
+type organization = t;
+
+module ModelConfig = {
+  type t = organization;
+  let table = "organizations";
+  let parseRow = row => {
+    id: row[0],
+    name: row[2],
+    createdAt: row[3],
+  };
+};
+
+module Model = Model.Make(ModelConfig);

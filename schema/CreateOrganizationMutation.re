@@ -22,7 +22,7 @@ let payload =
         ),
         field(
           "organization",
-          ~typ=Organization.resolver,
+          ~typ=Organization.typ,
           ~args=Arg.[],
           ~resolve=(_: Context.t, (_, organization)) =>
           organization

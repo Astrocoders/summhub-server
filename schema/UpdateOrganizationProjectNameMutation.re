@@ -27,7 +27,7 @@ let payload =
                 _:
                   Graphql_lwt.Schema.typ(
                     Context.t,
-                    option((option(string), option(Organization.Project.t))),
+                    option((option(string), option(Project.t))),
                   ),
               ) =>
       [
@@ -40,7 +40,7 @@ let payload =
         ),
         field(
           "project",
-          ~typ=Organization.Project.resolver,
+          ~typ=Project.typ,
           ~args=Arg.[],
           ~resolve=(_: Context.t, (_, project)) =>
           project
@@ -54,7 +54,10 @@ let updateOrganizationProjectName =
     io_field(
       "updateOrganizationProjectName",
       ~typ=non_null(payload),
-      ~args=Arg.[arg("input", ~typ=non_null(updateOrganizationProjectNameInput))],
+      ~args=
+        Arg.[
+          arg("input", ~typ=non_null(updateOrganizationProjectNameInput)),
+        ],
       ~resolve=(info, (), _input) =>
       switch (info.user) {
       | Some(user) => Lwt.return(Ok((None, None)))

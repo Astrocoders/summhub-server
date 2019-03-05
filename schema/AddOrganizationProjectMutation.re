@@ -21,9 +21,7 @@ let payload =
                 _:
                   Graphql_lwt.Schema.typ(
                     Context.t,
-                    option(
-                      (option(string), option(Organization.Project.t)),
-                    ),
+                    option((option(string), option(Project.t))),
                   ),
               ) =>
       [
@@ -36,7 +34,7 @@ let payload =
         ),
         field(
           "project",
-          ~typ=Organization.Project.resolver,
+          ~typ=Project.typ,
           ~args=Arg.[],
           ~resolve=(_: Context.t, (_, project)) =>
           project
