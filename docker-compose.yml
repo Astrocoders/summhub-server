@@ -4,24 +4,28 @@ services:
   server:
     env_file:
       - ./.env
+    environment:
+      DATABASE_URL: "postgresql://0.0.0.0:5432/summhub_prod"
+      DATABASE_USER: "summhub"
+      DATABASE_PASSWORD: "summhub"
     build: .
     expose:
-      - 3000
+      - "3000"
     ports:
-      - 3000:3000
+      - "3000:3000"
     depends_on:
       - db
+    links:
+      - sqitch
 
   db:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "summhub"
+      POSTGRES_USER: "summhub"
+      POSTGRES_DB: "summhub_prod"
     ports:
-      - 5432:5432
-    volumes:
-      - database_data:/var/lib/postgresql/data
-volumes:
-  database_data:
-    driver: local
+      - "5432:5432"
+    expose:
+      - "5432"
