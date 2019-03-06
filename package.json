@@ -56,7 +56,11 @@
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
     "test": "esy x TestSummarize.exe",
     "docker:prod": "docker-compose up",
-    "docker:dev": "docker-compose -f docker-compose.dev.yml up"
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up",
+    "knex:migrate": "npx knex migrate:latest",
+    "knex:rollback": "npx knex migrate:rollback",
+    "knex:create": "npx knex migrate:make",
+    "knex:seed": "npx knex seed:run"
   },
   "dependencies": {
     "@esy-ocaml/reason": "*",
@@ -67,7 +71,6 @@
     "@opam/jwt": "0.1",
     "@opam/lwt": "4.1.0",
     "@opam/lwt_ppx": "1.2.1",
-    "@opam/lwt_ssl": "1.1.2",
     "@opam/ppx_let": "v0.11.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
@@ -78,5 +81,8 @@
     "pg": "^7.8.1",
     "refmterr": "*"
   },
-  "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" }
+  "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" },
+  "resolutions":{
+    "@opam/sexplib": "v0.11.0"
+  }
 }
