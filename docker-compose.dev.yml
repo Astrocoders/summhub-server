@@ -5,9 +5,10 @@ services:
     env_file:
       - ./.env
     environment:
-      DATABASE_URL: "postgresql://0.0.0.0:5432/summhub_dev"
+      DATABASE_URL: postgresql://postgres:5432/summhub_dev
       DATABASE_USER: "summhub"
       DATABASE_PASSWORD: "summhub"
+      DATABASE_HOST: "0.0.0.0"
     build: .
     expose:
       - "3000"
@@ -15,7 +16,6 @@ services:
       - "3000:3000"
     depends_on:
       - db
-      - sqitch
 
   db:
     image: postgres:latest
@@ -28,7 +28,3 @@ services:
       - "5432:5432"
     expose:
       - "5432"
-
-  sqitch:
-    image: sqitch/sqitch:latest
-
