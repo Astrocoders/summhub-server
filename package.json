@@ -54,7 +54,9 @@
   "scripts": {
     "start": "esy b && env $(cat .env | xargs) esy x Server.exe",
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
-    "test": "esy x TestSummarize.exe"
+    "test": "esy x TestSummarize.exe",
+    "docker:prod": "docker-compose up",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up"
   },
   "dependencies": {
     "@esy-ocaml/reason": "*",
@@ -63,15 +65,17 @@
     "@opam/graphql-cohttp": "0.8.0",
     "@opam/graphql-lwt": "0.8.0",
     "@opam/jwt": "0.1",
-    "@opam/jwto": "0.1.4",
     "@opam/lwt": "4.1.0",
     "@opam/lwt_ppx": "1.2.1",
+    "@opam/lwt_ssl": "1.1.2",
     "@opam/ppx_let": "v0.11.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
     "ezpostgresql": "bobbypriambodo/ezpostgresql:ezpostgresql.opam#master",
+    "knex": "^0.16.3",
     "ocaml": "^4.4.0",
     "pesy": "*",
+    "pg": "^7.8.1",
     "refmterr": "*"
   },
   "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" }

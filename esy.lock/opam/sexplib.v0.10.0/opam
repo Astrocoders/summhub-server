@@ -10,9 +10,7 @@ build: [
 ]
 depends: [
   "ocaml" {>= "4.04.1"}
-  "parsexp" {>= "v0.11" & < "v0.12"}
-  "sexplib0" {>= "v0.11" & < "v0.12"}
-  "jbuilder" {build & >= "1.0+beta18.1"}
+  "jbuilder" {build & >= "1.0+beta12"}
   "num"
 ]
 synopsis: "Library for serializing OCaml values to and from S-expressions"
@@ -23,6 +21,6 @@ OCaml's standard library that was developed by Jane Street, the
 largest industrial user of OCaml."""
 url {
   src:
-    "https://ocaml.janestreet.com/ocaml-core/v0.11/files/sexplib-v0.11.0.tar.gz"
-  checksum: "md5=1d53d945914b6b9a380dc8923f19e9ae"
+    "https://ocaml.janestreet.com/ocaml-core/v0.10/files/sexplib-v0.10.0.tar.gz"
+  checksum: "md5=b8f5db21a2b19aadc753c6e626019068"
 }
