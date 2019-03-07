@@ -5,7 +5,7 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      host: process.env.DATABASE_HOST || '127.0.0.1'
+      host: process.env.DATABASE_HOST || '127.0.0.1',
       database: 'summhub_dev',
       user:     process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD
@@ -22,7 +22,7 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      host: process.env.DATABASE_HOST
+      host: process.env.DATABASE_HOST,
       database: 'summhub_prod',
       user:     process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD
