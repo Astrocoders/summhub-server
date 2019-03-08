@@ -1,7 +1,8 @@
 version: 2
 jobs:
   build:
-    machine: true
+    docker:
+      - image: circleci/android:api-27-node
     working_directory: ~/repo
     steps:
       - checkout
@@ -9,10 +10,17 @@ jobs:
       - run:
           name: Decode Env File
           command: echo ${ENV_FILE} | base64 --decode > .env
+      - run:
+          name: Install Esy
+          command: npm install -g esy
 
       - run:
-          name: Build Docker
-          command: docker-compose build
+          name: Install dependencies
+          command: esy install
+
+      - run:
+          name: Build Server
+          command: esy build
 
   deploy:
     machine: true
@@ -27,7 +35,8 @@ jobs:
       - run:
           name: Deploy container
           command: |
-            scp -r . ${DROPLET_USER}@${DROPLET_IP}:/server
+            git archieve develop --format=tar.gz --output=server.tar.gz
+            scp server.tar.gz ${DROPLET_USER}@${DROPLET_IP}:/server
             ssh ${DROPLET_USER}@${DROPLET_IP} "cd /server && docker-compose up"
 
 workflows:
@@ -35,7 +44,4 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-      - deploy:
-          filters:
-            branches:
-              only: develop
+      - deploy
