@@ -37,7 +37,9 @@ jobs:
           command: |
             git archive develop --format=tar.gz --output=server.tar.gz
             scp ./server.tar.gz ${DROPLET_USER}@${DROPLET_IP}:/home/
-            ssh ${DROPLET_USER}@${DROPLET_IP} "cd /home && tar -xzf server.tar.gz && cd server && docker-compose up"
+            ssh ${DROPLET_USER}@${DROPLET_IP} "cd /home && tar -xzf server.tar.gz -C /home/server"
+            scp ./.env ${DROPLET_USER}@${DROPLET_IP}:/home/server
+            ssh ${DROPLET_USER}@${DROPLET_IP} "cd /home/server/ && docker-compose up"
 
 workflows:
   version: 2
