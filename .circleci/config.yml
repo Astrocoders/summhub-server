@@ -12,7 +12,7 @@ jobs:
           command: echo ${ENV_FILE} | base64 --decode > .env
       - run:
           name: Install Esy
-          command: sudo npm install -g esy
+          command: sudo npm install -g @esy-nightly/esy@0.4.10-e6e1e7 --unsafe-perm
 
       - run:
           name: Install dependencies
