@@ -1,33 +1,45 @@
 version: 2
 jobs:
   build:
-    machine: true
+    docker:
+      - image: circleci/node:latest
     working_directory: ~/repo
     steps:
       - checkout
 
       - run:
-        name: Decode Env File
-        command: echo ${ENV_FILE} | base64 --decode > .env
+          name: Decode Env File
+          command: echo ${ENV_FILE} | base64 --decode > .env
+      - run:
+          name: Install Esy
+          command: sudo npm install -g @esy-nightly/esy@0.4.10-e6e1e7 --unsafe-perm
 
       - run:
-        name: Build Docker
-        command: docker-compose build
+          name: Install dependencies
+          command: esy install
+
+      - run:
+          name: Build Server
+          command: esy build
 
   deploy:
     machine: true
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-        name: Decode Env File
-        command: echo ${ENV_FILE} | base64 --decode > .env
 
       - run:
-        name: Deploy container
-        command: |
-          scp -r . ${DROPLET_USER}@${DROPLET_IP}:/server
-          ssh ${DROPLET_USER}@${DROPLET_IP} "cd /server && docker-compose up"
+          name: Decode Env File
+          command: echo ${ENV_FILE} | base64 --decode > .env
+
+      - run:
+          name: Deploy container
+          command: |
+            git archive develop --format=tar.gz --output=server.tar.gz
+            scp ./server.tar.gz ${DROPLET_USER}@${DROPLET_IP}:/home/
+            ssh ${DROPLET_USER}@${DROPLET_IP} "cd /home && tar -xzf server.tar.gz -C /home/server"
+            scp ./.env ${DROPLET_USER}@${DROPLET_IP}:/home/server
+            ssh ${DROPLET_USER}@${DROPLET_IP} "cd /home/server/ && docker-compose up -d"
 
 workflows:
   version: 2
