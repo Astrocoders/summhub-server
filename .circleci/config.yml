@@ -36,7 +36,7 @@ jobs:
           name: Deploy container
           command: |
             git archive develop --format=tar.gz --output=server.tar.gz
-            scp server.tar.gz ${DROPLET_USER}@${DROPLET_IP}:/server.tar.gz
+            scp ./server.tar.gz ${DROPLET_USER}@${DROPLET_IP}:/
             ssh ${DROPLET_USER}@${DROPLET_IP} "tar -xzf server.tar.gz && cd /server && docker-compose up"
 
 workflows:
