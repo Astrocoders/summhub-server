@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/android:api-27-node
+      - image: circleci/node:latest
     working_directory: ~/repo
     steps:
       - checkout
@@ -35,7 +35,7 @@ jobs:
       - run:
           name: Deploy container
           command: |
-            git archieve develop --format=tar.gz --output=server.tar.gz
+            git archive develop --format=tar.gz --output=server.tar.gz
             scp server.tar.gz ${DROPLET_USER}@${DROPLET_IP}:/server.tar.gz
             ssh ${DROPLET_USER}@${DROPLET_IP} "tar -xzf server.tar.gz && cd /server && docker-compose up"
 
