@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - run:
+        name: Decode Env File
+        command: echo ${ENV_FILE} | base64 --decode > .env
+
+      - run:
+        name: Build Docker
+        command: docker-compose build
+
+  deploy:
+    machine: true
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+        name: Decode Env File
+        command: echo ${ENV_FILE} | base64 --decode > .env
+
+      - run:
+        name: Deploy container
+        command: |
+          scp -r . ${DROPLET_USER}@${DROPLET_IP}:/server
+          ssh ${DROPLET_USER}@${DROPLET_IP} "cd /server && docker-compose up"
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          filters:
+            branches:
+              only: develop
