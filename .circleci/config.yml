@@ -12,7 +12,7 @@ jobs:
           command: echo ${ENV_FILE} | base64 --decode > .env
       - run:
           name: Install Esy
-          command: npm install -g esy
+          command: sudo npm install -g esy
 
       - run:
           name: Install dependencies
@@ -36,8 +36,8 @@ jobs:
           name: Deploy container
           command: |
             git archieve develop --format=tar.gz --output=server.tar.gz
-            scp server.tar.gz ${DROPLET_USER}@${DROPLET_IP}:/server
-            ssh ${DROPLET_USER}@${DROPLET_IP} "cd /server && docker-compose up"
+            scp server.tar.gz ${DROPLET_USER}@${DROPLET_IP}:/server.tar.gz
+            ssh ${DROPLET_USER}@${DROPLET_IP} "tar -xzf server.tar.gz && cd /server && docker-compose up"
 
 workflows:
   version: 2
