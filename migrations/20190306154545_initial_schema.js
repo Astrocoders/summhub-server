@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
         .uuid('id')
         .notNullable()
         .primary()
-      table.string('name').notNullable()
+      table.string('email').notNullable()
       table
         .enu('role', ['ADMIN', 'USER'])
         .defaultTo('USER')
