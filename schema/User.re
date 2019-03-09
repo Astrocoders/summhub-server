@@ -7,7 +7,7 @@ type role =
 
 type t = {
   id: string,
-  name: string,
+  email: string,
   role,
 };
 
@@ -18,9 +18,22 @@ module ModelConfig = {
   let table = "app_users";
   let parseRow = row => {
     id: row[0],
-    name: row[1],
+    email: row[1],
     role: row[2] == "ADMIN" ? Admin : User,
   };
 };
 
 module Model = Model.Make(ModelConfig);
+
+let getByEmail = (connection, email) =>
+  Model.findOne(~connection, ~clause="email=" ++ "'" ++ email ++ "'", ())
+  |> Lwt_main.run;
+
+let createUser = (connection, email) =>
+  Model.create(
+    ~connection,
+    ~fields=["email"],
+    ~values=[Database.wrapColumnValue(email)],
+    (),
+  )
+  |> Lwt_main.run;
