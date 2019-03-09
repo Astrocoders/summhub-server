@@ -7,6 +7,6 @@
    (name Library)
    ; Other libraries list this name in their package.json 'require' field to use this library.
    (public_name summarize.lib)
-   (libraries  ezpostgresql lwt lwt.unix ppx_let lwt_ppx str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix jwt )
+   (libraries  ezpostgresql lwt lwt.unix ppx_let lwt_ppx str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix jwt yojson )
    (preprocess ( pps lwt_ppx ))  ; From package.json preprocess field
 )

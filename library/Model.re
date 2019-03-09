@@ -8,6 +8,24 @@ module Make = (Config: Config) => {
   open Ezpostgresql.Pool;
   open Lwt_result.Infix;
 
+  let create = (~connection, ~fields, ~values, ()) => {
+    let query =
+      "insert into "
+      ++ Config.table
+      ++ " ("
+      ++ (fields |> String.concat(","))
+      ++ ")"
+      ++ " values ("
+      ++ (values |> String.concat(","))
+      ++ ")";
+    let%lwt operation_result = command(~query, connection);
+
+    switch (operation_result) {
+    | Ok(_) => Lwt.return(Some("success"))
+    | _ => Lwt.return(None)
+    };
+  };
+
   let findOne = (~connection, ~clause=?, ()) => {
     let query =
       "select * from "
