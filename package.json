@@ -80,7 +80,8 @@
     "ocaml": "^4.4.0",
     "pesy": "*",
     "pg": "^7.8.1",
-    "refmterr": "*"
+    "refmterr": "*",
+    "uuid": "^3.3.2"
   },
   "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" },
   "resolutions": { "@opam/sexplib": "v0.11.0" }
