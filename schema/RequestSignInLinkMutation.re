@@ -25,43 +25,24 @@ let requestSignInLink =
         let%lwt user = User.getByEmail(context.connection, email);
         switch (user) {
         | Some(user) =>
-          let%lwt (response, _) =
-            Sendgrid.sendEmail(
-              ~to_=email,
-              ~subject="Summhub - Login Access Link",
-              ~content=
-                "<a href=\"https://summhub.com/sign-in/\""
-                ++ Auth.encodeToken(user.id)
-                ++ " > Click here to sign in </a>",
-            );
+          let%lwt (response, _) = User.sendSignInLink(user);
           /* Sendgrid uses the code 202 to indicate success otherwise is fail https://sendgrid.com/docs/API_Reference/api_v3.html */
           switch (response.status) {
           | `Code(202) => Lwt.return(Ok(None))
+          | `Accepted => Lwt.return(Ok(None))
           | _ => Lwt.return(Ok(Some(Errors.errorOnEmailSend)))
           };
           Lwt.return(Ok(None));
         | None =>
-          let%lwt result = User.createUser(context.connection, email);
+          let%lwt result = User.insert(context.connection, ~email, ~role="USER");
           switch (result) {
           | None => Lwt.return(Ok(Some(Errors.somethingWentWrong)))
-          | Some(_) =>
-            let%lwt user = User.getByEmail(context.connection, email);
-            switch (user) {
-            | Some(user) =>
-              let%lwt (response, _) =
-                Sendgrid.sendEmail(
-                  ~to_=email,
-                  ~subject="Summhub - Login Access Link",
-                  ~content=
-                    "<a href=\"https://summhub.com/sign-in/\""
-                    ++ Auth.encodeToken(user.id)
-                    ++ " > Click here to sign in </a>",
-                );
-              switch (response.status) {
-              | `Code(202) => Lwt.return(Ok(None))
-              | _ => Lwt.return(Ok(Some(Errors.errorOnEmailSend)))
-              };
-            | None => Lwt.return(Ok(Some(Errors.somethingWentWrong)))
+          | Some(user) =>
+            let%lwt (response, _) = User.sendSignInLink(user);
+            switch (response.status) {
+            | `Code(202) => Lwt.return(Ok(None))
+            | `Accepted => Lwt.return(Ok(None))
+            | _ => Lwt.return(Ok(Some(Errors.errorOnEmailSend)))
             };
           };
         };
