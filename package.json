@@ -20,7 +20,7 @@
         "pastel.lib", "console.lib", "graphql-lwt", "graphql-cohttp",
         "cohttp-lwt-unix", "jwt", "yojson"
       ],
-      "preprocess": [ "pps", "lwt_ppx" ]
+      "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson" ]
     },
     "graphql-helpers": {
       "name": "summarize.graphql-helpers",
@@ -37,7 +37,8 @@
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
         "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers",
         "ezpostgresql", "summarize.lib"
-      ]
+      ],
+      "preprocess": [ "pps", "lwt_ppx" ]
     },
     "executable": {
       "require": [
@@ -80,8 +81,8 @@
     "ocaml": "^4.4.0",
     "pesy": "*",
     "pg": "^7.8.1",
-    "refmterr": "*",
-    "uuid": "^3.3.2"
+    "ppx_deriving_yojson": "ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#master",
+    "refmterr": "*"
   },
   "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" },
   "resolutions": { "@opam/sexplib": "v0.11.0" }
