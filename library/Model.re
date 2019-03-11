@@ -8,21 +8,23 @@ module Make = (Config: Config) => {
   open Ezpostgresql.Pool;
   open Lwt_result.Infix;
 
-  let create = (~connection, ~fields, ~values, ()) => {
+  exception Error_on_database_insert;
+
+  let insert = (~connection, ~fields: list((string, string)), ()) => {
     let query =
       "insert into "
       ++ Config.table
       ++ " ("
-      ++ (fields |> String.concat(","))
+      ++ (fields |> List.map(((name, _)) => name) |> String.concat(","))
       ++ ")"
       ++ " values ("
-      ++ (values |> String.concat(","))
+      ++ (fields |> List.map(((_, value)) => value) |> String.concat(","))
       ++ ")";
-    let%lwt operation_result = command(~query, connection);
+    let%lwt operationResult = command(~query, connection);
 
-    switch (operation_result) {
-    | Ok(_) => Lwt.return(Some("success"))
-    | _ => Lwt.return(None)
+    switch (operationResult) {
+    | Ok(response) => Lwt.return(Some(response))
+    | _ => Lwt.fail(Error_on_database_insert)
     };
   };
 
@@ -36,17 +38,17 @@ module Make = (Config: Config) => {
         | None => ""
         }
       );
-    let%lwt operation_result =
+    let%lwt operationResult =
       one(~query, connection)
       >>= (
-        row_opt =>
-          switch (row_opt) {
+        rowOpt =>
+          switch (rowOpt) {
           | Some(row) => Lwt_result.return(Some(Config.parseRow(row)))
           | None => Lwt_result.return(None)
           }
       );
 
-    switch (operation_result) {
+    switch (operationResult) {
     | Ok(Some(parsedRow)) => Lwt.return(Some(parsedRow))
     | _ => Lwt.return(None)
     };
@@ -62,7 +64,7 @@ module Make = (Config: Config) => {
         | None => ""
         }
       );
-    let%lwt operation_result =
+    let%lwt operationResult =
       all(~query, connection)
       >>= (
         result =>
@@ -71,7 +73,7 @@ module Make = (Config: Config) => {
           )
       );
 
-    switch (operation_result) {
+    switch (operationResult) {
     | Ok(parsedItems) => Lwt.return(Some(parsedItems))
     | _ => Lwt.return(None)
     };
