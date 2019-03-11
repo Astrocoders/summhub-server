@@ -37,9 +37,15 @@ let createOrganization =
       "createOrganization",
       ~typ=non_null(payload),
       ~args=Arg.[],
-      ~resolve=(info, ()) =>
-      switch (info.user) {
-      | Some(user) => Lwt.return(Ok((None, None)))
+      ~resolve=(context, ()) =>
+      switch (context.user) {
+      | Some(user) =>
+        let%lwt result =
+          Organization.insert(context.connection, ~userId=user.id);
+        switch (result) {
+        | None => Lwt.return(Ok((Some(Errors.somethingWentWrong), None)))
+        | Some(organization) => Lwt.return(Ok((None, Some(organization))))
+        };
       | None => Lwt.return(Ok((Some(Errors.unauthorized), None)))
       }
     )
