@@ -19,11 +19,15 @@ module Make = (Config: Config) => {
       ++ ")"
       ++ " values ("
       ++ (fields |> List.map(((_, value)) => value) |> String.concat(","))
-      ++ ")";
-    let%lwt operationResult = command(~query, connection);
+      ++ ") returning id, "
+      ++ (fields |> List.map(((name, _)) => name) |> String.concat(","));
+    let%lwt operationResult = command_returning(~query, connection);
 
     switch (operationResult) {
-    | Ok(response) => Lwt.return(Some(response))
+    | Ok(response) =>
+      Array.length(response) > 0
+        ? Lwt.return(Some(Config.parseRow(response[0])))
+        : Lwt.fail(Error_on_database_insert)
     | _ => Lwt.fail(Error_on_database_insert)
     };
   };
