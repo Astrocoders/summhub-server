@@ -24,20 +24,6 @@ summarize@0.0.0
     require: summarize.lib
 ```
 
-## Setup Database
-
-Set your `DATABASE_URL` on `.env`
-
-Set your database config o `sqitch.conf`
-
-Install `sqitch` https://sqitch.org/
-
-Then on the root of the project run:
-
-```
-sqitch deploy db:pg:database_name
-```
-
 ## Developing:
 
 ```
@@ -46,6 +32,15 @@ git clone <this-repo>
 esy install
 esy build
 ```
+
+## Setup Database
+
+Set your database informations following `.env.example` on `.env`
+
+Then on the root of the project run:
+
+`yarn knex:migrate`
+
 
 ## Running Binary:
 
@@ -64,8 +59,4 @@ esy test
 
 ## Adding Migrations
 
-```
-sqitch add file_name
-```
-
-Then edit the generated files with the information's of: deploy changes, validation and rollback
+`yarn knex:create`

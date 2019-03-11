@@ -1,11 +1,13 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
+    knex.raw('create extension if not exists "uuid-ossp"'),
     knex.schema.createTable('app_users', table => {
       table
         .uuid('id')
         .notNullable()
         .primary()
-      table.string('name').notNullable()
+        .defaultTo(knex.raw('uuid_generate_v4()'))
+      table.string('email').notNullable()
       table
         .enu('role', ['ADMIN', 'USER'])
         .defaultTo('USER')
@@ -17,6 +19,7 @@ exports.up = function(knex, Promise) {
         .uuid('id')
         .notNullable()
         .primary()
+        .defaultTo(knex.raw('uuid_generate_v4()'))
       table.string('name').notNullable()
       table.timestamp('created_at').defaultTo(knex.fn.now())
       table.uuid('user_id').notNullable().references('id').inTable('app_users')
@@ -26,6 +29,7 @@ exports.up = function(knex, Promise) {
         .uuid('id')
         .notNullable()
         .primary()
+        .defaultTo(knex.raw('uuid_generate_v4()'))
       table.uuid('organization_id').notNullable().references('id').inTable('organizations')
       table.string('email').notNullable()
       table.timestamp('created_at').defaultTo(knex.fn.now())
@@ -35,6 +39,7 @@ exports.up = function(knex, Promise) {
         .uuid('id')
         .notNullable()
         .primary()
+        .defaultTo(knex.raw('uuid_generate_v4()'))
       table.uuid('organization_id').notNullable().references('id').inTable('organizations')
       table.string('name').notNullable()
       table.string('webhook').notNullable()
@@ -45,6 +50,7 @@ exports.up = function(knex, Promise) {
         .uuid('id')
         .notNullable()
         .primary()
+        .defaultTo(knex.raw('uuid_generate_v4()'))
       table.uuid('user_id').notNullable().references('id').inTable('app_users')
       table.string('title').notNullable()
       table.string('body').notNullable()
@@ -58,6 +64,7 @@ exports.up = function(knex, Promise) {
         .uuid('id')
         .notNullable()
         .primary()
+        .defaultTo(knex.raw('uuid_generate_v4()'))
       table.uuid('notification_id').notNullable().references('id').inTable('notifications')
       table.string('email').notNullable()
       table.string('message').notNullable()
@@ -74,5 +81,6 @@ exports.down = function(knex, Promise) {
     knex.schema.dropTableIfExists('messages'),
     knex.schema.dropTableIfExists('notifications'),
     knex.schema.dropTableIfExists('app_users'),
+    knex.raw('drop extension if exists "uuid-ossp"'),
   ])
 }

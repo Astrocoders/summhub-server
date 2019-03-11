@@ -2,6 +2,8 @@ open Ezpostgresql;
 
 exception Database_not_configured;
 
+let wrapStringValue = value => "'" ++ value ++ "'";
+
 let conninfo =
   try (Sys.getenv("DATABASE_URL")) {
   | Not_found => raise(Database_not_configured)

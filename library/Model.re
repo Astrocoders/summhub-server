@@ -8,6 +8,30 @@ module Make = (Config: Config) => {
   open Ezpostgresql.Pool;
   open Lwt_result.Infix;
 
+  exception Error_on_database_insert;
+
+  let insert = (~connection, ~fields: list((string, string)), ()) => {
+    let query =
+      "insert into "
+      ++ Config.table
+      ++ " ("
+      ++ (fields |> List.map(((name, _)) => name) |> String.concat(","))
+      ++ ")"
+      ++ " values ("
+      ++ (fields |> List.map(((_, value)) => value) |> String.concat(","))
+      ++ ") returning id, "
+      ++ (fields |> List.map(((name, _)) => name) |> String.concat(","));
+    let%lwt operationResult = command_returning(~query, connection);
+
+    switch (operationResult) {
+    | Ok(response) =>
+      Array.length(response) > 0
+        ? Lwt.return(Some(Config.parseRow(response[0])))
+        : Lwt.fail(Error_on_database_insert)
+    | _ => Lwt.fail(Error_on_database_insert)
+    };
+  };
+
   let findOne = (~connection, ~clause=?, ()) => {
     let query =
       "select * from "
@@ -18,17 +42,17 @@ module Make = (Config: Config) => {
         | None => ""
         }
       );
-    let%lwt operation_result =
+    let%lwt operationResult =
       one(~query, connection)
       >>= (
-        row_opt =>
-          switch (row_opt) {
+        rowOpt =>
+          switch (rowOpt) {
           | Some(row) => Lwt_result.return(Some(Config.parseRow(row)))
           | None => Lwt_result.return(None)
           }
       );
 
-    switch (operation_result) {
+    switch (operationResult) {
     | Ok(Some(parsedRow)) => Lwt.return(Some(parsedRow))
     | _ => Lwt.return(None)
     };
@@ -44,7 +68,7 @@ module Make = (Config: Config) => {
         | None => ""
         }
       );
-    let%lwt operation_result =
+    let%lwt operationResult =
       all(~query, connection)
       >>= (
         result =>
@@ -53,7 +77,7 @@ module Make = (Config: Config) => {
           )
       );
 
-    switch (operation_result) {
+    switch (operationResult) {
     | Ok(parsedItems) => Lwt.return(Some(parsedItems))
     | _ => Lwt.return(None)
     };

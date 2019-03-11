@@ -46,8 +46,8 @@ let userResolver =
             p.id
           ),
           field(
-            "name", ~args=Arg.[], ~typ=non_null(string), ~resolve=(_info, p) =>
-            p.name
+            "email", ~args=Arg.[], ~typ=non_null(string), ~resolve=(_info, p) =>
+            p.email
           ),
           field(
             "role",

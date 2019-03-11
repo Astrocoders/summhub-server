@@ -18,9 +18,9 @@
       "require": [
         "ezpostgresql", "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str",
         "pastel.lib", "console.lib", "graphql-lwt", "graphql-cohttp",
-        "cohttp-lwt-unix", "jwt"
+        "cohttp-lwt-unix", "jwt", "yojson", "tls"
       ],
-      "preprocess": [ "pps", "lwt_ppx" ]
+      "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson" ]
     },
     "graphql-helpers": {
       "name": "summarize.graphql-helpers",
@@ -36,15 +36,16 @@
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
         "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers",
-        "ezpostgresql", "summarize.lib"
-      ]
+        "ezpostgresql", "summarize.lib", "tls"
+      ],
+      "preprocess": [ "pps", "lwt_ppx" ]
     },
     "executable": {
       "require": [
         "lwt", "lwt.unix", "str", "ppx_let", "lwt_ppx", "pastel.lib",
         "console.lib", "graphql-lwt", "graphql-cohttp", "cohttp-lwt-unix",
         "summarize.lib", "summarize.schema", "summarize.graphql-helpers",
-        "ezpostgresql", "jwt"
+        "ezpostgresql", "jwt", "tls"
       ],
       "main": "Server",
       "name": "Server.exe",
@@ -72,6 +73,8 @@
     "@opam/lwt": "4.1.0",
     "@opam/lwt_ppx": "1.2.1",
     "@opam/ppx_let": "v0.11.0",
+    "@opam/tls": "0.10.1",
+    "@opam/yojson": "1.7.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
     "ezpostgresql": "bobbypriambodo/ezpostgresql:ezpostgresql.opam#master",
@@ -79,10 +82,10 @@
     "ocaml": "^4.4.0",
     "pesy": "*",
     "pg": "^7.8.1",
+    "ppx_deriving_yojson":
+      "ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#master",
     "refmterr": "*"
   },
   "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" },
-  "resolutions":{
-    "@opam/sexplib": "v0.11.0"
-  }
+  "resolutions": { "@opam/sexplib": "v0.11.0" }
 }
