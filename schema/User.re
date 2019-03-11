@@ -26,14 +26,11 @@ module ModelConfig = {
 module Model = Model.Make(ModelConfig);
 
 let getByEmail = (connection, email) =>
-  Model.findOne(~connection, ~clause="email=" ++ "'" ++ email ++ "'", ())
-  |> Lwt_main.run;
+  Model.findOne(~connection, ~clause="email=" ++ "'" ++ email ++ "'", ());
 
 let createUser = (connection, email) =>
-  Model.create(
+  Model.insert(
     ~connection,
-    ~fields=["email"],
-    ~values=[Database.wrapColumnValue(email)],
+    ~fields=[("email", Database.wrapColumnValue(email))],
     (),
-  )
-  |> Lwt_main.run;
+  );
