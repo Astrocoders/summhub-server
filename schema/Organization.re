@@ -59,11 +59,18 @@ type organization = t;
 module ModelConfig = {
   type t = organization;
   let table = "organizations";
-  let parseRow = row => {
-    id: row[0],
-    name: row[2],
-    createdAt: row[3],
-  };
+  let parseRow = row => {id: row[0], name: row[1], createdAt: row[2]};
 };
 
 module Model = Model.Make(ModelConfig);
+
+/* TODO: Fetch random name  */
+let insert = (connection, ~userId) =>
+  Model.insert(
+    ~connection,
+    ~fields=[
+      ("name", Database.wrapStringValue("Organization Created")),
+      ("user_id", Database.wrapStringValue(userId)),
+    ],
+    (),
+  );
