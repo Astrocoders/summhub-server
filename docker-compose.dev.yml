@@ -2,28 +2,39 @@ version: '2'
 
 services:
   server:
-    env_file:
-      - ./.env
-    environment:
-      DATABASE_URL: postgresql://postgres:5432/summhub_dev
-      DATABASE_USER: "summhub"
-      DATABASE_PASSWORD: "summhub"
-      DATABASE_HOST: "0.0.0.0"
     build: .
+    environment:
+      DATABASE_URL: postgres://summhub:summhub@db:5432/summhub_dev
+      DATABASE_USER: "postgres"
+      DATABASE_PASSWORD: "postgres"
+      DATABASE_HOST: "0.0.0.0"
+      JWT_SECRET: "iremofeorirmiremoim"
+      SENDGRID_API_KEY: ""
+      SENDGRID_SENDER_EMAIL: ""
     expose:
       - "3000"
     ports:
       - "3000:3000"
     depends_on:
       - db
+      - hasura
+
+  hasura:
+    image: hasura/graphql-engine:v1.0.0-alpha40
+    ports:
+    - "8080:8080"
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://summhub:summhub@db:5432/summhub_dev
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+    depends_on:
+    - db
 
   db:
     image: postgres:latest
-    restart: always
     environment:
-      POSTGRES_PASSWORD: "summhub"
-      POSTGRES_USER: "summhub"
       POSTGRES_DB: "summhub_dev"
+      POSTGRES_USER: "summhub"
+      POSTGRES_PASSWORD: "summhub"
     ports:
       - "5432:5432"
     expose:
