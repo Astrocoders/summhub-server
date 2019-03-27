@@ -11,3 +11,4 @@ summarize.install
 *.install
 .idea/
 .env
+.graphql_ppx_cache/
