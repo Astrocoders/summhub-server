@@ -4,7 +4,8 @@
   "description": "My Project",
   "esy": {
     "build": "pesy",
-    "release": { "releasedBinaries": [ "Server.exe" ] }
+    "release": { "releasedBinaries": [ "Server.exe" ] },
+    "buildsInSource": "unsafe"
   },
   "buildDirs": {
     "test": {
@@ -29,7 +30,8 @@
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
         "graphql-cohttp", "cohttp-lwt-unix", "summarize.lib", "httpkit",
         "httpaf", "httpkit-lwt"
-      ]
+      ],
+      "preprocess": [ "pps", "ppx_deriving_yojson" ]
     },
     "schema": {
       "name": "summarize.schema",
@@ -39,7 +41,7 @@
         "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers",
         "ezpostgresql", "summarize.lib", "tls"
       ],
-      "preprocess": [ "pps", "lwt_ppx", "graphql_ppx" ]
+      "preprocess": [ "pps", "lwt_ppx", "graphql_ppx", "ppx_deriving_yojson" ]
     },
     "executable": {
       "require": [
@@ -66,9 +68,9 @@
     "knex:seed": "npx knex seed:run"
   },
   "dependencies": {
-    "@esy-ocaml/reason": "*",
+    "@esy-ocaml/reason": ">=3.4.0",
     "@opam/cohttp-lwt-unix": "1.2.0",
-    "@opam/dune": ">=1.6.0",
+    "@opam/dune": "^1.7.2",
     "@opam/graphql-cohttp": "0.8.0",
     "@opam/graphql-lwt": "0.8.0",
     "@opam/httpaf": "*",
@@ -84,12 +86,9 @@
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
     "ezpostgresql": "bobbypriambodo/ezpostgresql:ezpostgresql.opam#master",
-    "graphql": "^14.2.0",
-    "graphql_ppx": "briskml/graphql_ppx#ee86d23",
-    "knex": "^0.16.3",
-    "ocaml": "^4.4.0",
+    "graphql_ppx": "briskml/graphql_ppx#4bc8a40",
+    "ocaml": "~4.7.1000",
     "pesy": "*",
-    "pg": "^7.8.1",
     "ppx_deriving_yojson":
       "ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#master",
     "refmterr": "*"
