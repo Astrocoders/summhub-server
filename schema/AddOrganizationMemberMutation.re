@@ -1,5 +1,6 @@
 open Graphql_lwt;
 open GraphqlHelpers;
+open Library;
 
 exception Error_on_add_organization_member;
 
@@ -80,12 +81,6 @@ type variables = {
   input: memberInput,
 };
 
-[@deriving yojson]
-type organizationId = {
-  [@key "organization_id"]
-  organization_id: string,
-};
-
 let addOrganizationMember =
   Schema.(
     io_field(
@@ -103,9 +98,7 @@ let addOrganizationMember =
           /* Needed because graphql_ppx defines scalar types to Json by default */
           pub organization_id =
             Some(
-              organizationId_to_yojson({
-                organization_id: input.organizationId,
-              }),
+              `Assoc([("organization_id", `String(input.organizationId))]),
             );
           pub id = None
         };
@@ -144,11 +137,7 @@ let addOrganizationMember =
               None,
               Some(
                 Member.{
-                  id:
-                    switch (content#id) {
-                    | `String(id) => id
-                    | _ => ""
-                    },
+                  id: Util.JSON.getStringWithDefault("", content#id),
                   email: content#email,
                 },
               ),
