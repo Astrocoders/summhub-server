@@ -8,5 +8,5 @@
    ; The name of the executable (runnable via esy x Server.exe) 
    (public_name Server.exe)  ;  From package.json name field
    (libraries  lwt lwt.unix str ppx_let lwt_ppx pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix summarize.lib summarize.schema summarize.graphql-helpers ezpostgresql jwt tls ) ;  From package.json require field (array of strings)
-   (preprocess ( pps lwt_ppx ))  ; From package.json preprocess field
+   (preprocess ( pps lwt_ppx graphql_ppx ))  ; From package.json preprocess field
 )
