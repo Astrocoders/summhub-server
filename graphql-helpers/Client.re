@@ -20,7 +20,7 @@ let readResponse = responseBody => {
         ~on_eof=
           () => {
             let string = String.concat("", prevStrings |> List.rev);
-            switch (Yojson.Basic.from_string(string)) {
+            switch (Yojson.Safe.from_string(string) |> Yojson.Safe.to_basic) {
             | exception x => Lwt.wakeup_exn(onFinish, x)
             | json =>
               switch (Yojson.Basic.Util.member("data", json)) {
@@ -51,14 +51,21 @@ let readResponse = responseBody => {
   readerPromise |> Lwt_result.catch;
 };
 
+[@deriving yojson]
+type queryBody = {
+  [@key "query"]
+  query: string,
+  [@key "variables"]
+  variables: option(Yojson.Safe.t),
+};
+
 let get = (query, ~variables, parse) => {
   open Httpkit_client;
-  let uri =
-    Uri.add_query_params'(
-      Uri.of_string(hasuraUrl),
-      [("query", query), ("variables", Yojson.Basic.to_string(variables))],
-    );
-  let request = Request.create(`POST, uri);
+  let uri = Uri.of_string(hasuraUrl);
+  let requestBody =
+    queryBody_to_yojson({query, variables: Some(variables)})
+    |> Yojson.Safe.to_string;
+  let request = Request.create(~body=requestBody, `POST, uri);
   Httpkit_lwt_client.(
     Lwt.Infix.(
       Http.send(request)
