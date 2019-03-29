@@ -35,6 +35,12 @@ esy build
 
 ## Setup Database
 
+### Setup postgres
+
+`
+docker run -p 5432:5432 --rm postgres:latest
+`
+
 ### Install Hasura CLI
 
 https://docs.hasura.io/1.0/graphql/manual/hasura-cli/install-hasura-cli.html
