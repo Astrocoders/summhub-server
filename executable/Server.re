@@ -150,7 +150,7 @@ let _ =
       Console.log(
         <Pastel>
           <Pastel> "Running at " </Pastel>
-          <Pastel color=Cyan> {string_of_int(port)} </Pastel>
+          <Pastel color=Cyan>{ "http://localhost:" ++ string_of_int(port) ++ "/graphql"} </Pastel>
         </Pastel>,
       );
       Cohttp_lwt_unix.Server.create(~mode, server);
