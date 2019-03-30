@@ -56,15 +56,14 @@ type queryBody = {
   [@key "query"]
   query: string,
   [@key "variables"]
-  variables: option(Yojson.Safe.t),
+  variables: Yojson.Safe.t,
 };
 
 let get = (query, ~variables, parse) => {
   open Httpkit_client;
   let uri = Uri.of_string(hasuraUrl);
   let requestBody =
-    queryBody_to_yojson({query, variables: Some(variables)})
-    |> Yojson.Safe.to_string;
+    queryBody_to_yojson({query, variables}) |> Yojson.Safe.to_string;
   let request = Request.create(~body=requestBody, `POST, uri);
   Httpkit_lwt_client.(
     Lwt.Infix.(

@@ -32,9 +32,9 @@ let requestSignInLink =
           | `Accepted => Lwt.return(Ok(None))
           | _ => Lwt.return(Ok(Some(Errors.errorOnEmailSend)))
           };
-          Lwt.return(Ok(None));
         | None =>
-          let%lwt result = User.insert(context.connection, ~email, ~role="USER");
+          let%lwt result =
+            User.insert(context.connection, ~email, ~role="USER");
           switch (result) {
           | None => Lwt.return(Ok(Some(Errors.somethingWentWrong)))
           | Some(user) =>
