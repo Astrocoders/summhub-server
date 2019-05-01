@@ -21,7 +21,7 @@
         "pastel.lib", "console.lib", "graphql-lwt", "graphql-cohttp",
         "cohttp-lwt-unix", "jwt", "yojson", "tls"
       ],
-      "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson" ]
+      "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql" ]
     },
     "graphql-helpers": {
       "name": "summarize.graphql-helpers",
@@ -41,7 +41,9 @@
         "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers",
         "ezpostgresql", "summarize.lib", "tls"
       ],
-      "preprocess": [ "pps", "lwt_ppx", "graphql_ppx", "ppx_deriving_yojson" ]
+      "preprocess": [
+        "pps", "lwt_ppx", "graphql_ppx", "ppx_deriving_yojson", "ppx_pgsql"
+      ]
     },
     "executable": {
       "require": [
@@ -70,7 +72,7 @@
   "dependencies": {
     "@esy-ocaml/reason": ">=3.4.0",
     "@opam/cohttp-lwt-unix": "1.2.0",
-    "@opam/dune": "^1.7.2",
+    "@opam/dune": "*",
     "@opam/graphql-cohttp": "0.8.0",
     "@opam/graphql-lwt": "0.8.0",
     "@opam/httpaf": "*",
@@ -80,20 +82,26 @@
     "@opam/jwt": "0.1",
     "@opam/lwt": "4.1.0",
     "@opam/lwt_ppx": "1.2.1",
+    "@opam/pgocaml": "2.3",
     "@opam/ppx_let": "v0.11.0",
+    "@opam/ppx_pgsql": "tizoc/ppx_pgsql:ppx_pgsql.opam",
     "@opam/tls": "0.10.1",
     "@opam/yojson": "1.7.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
     "ezpostgresql": "bobbypriambodo/ezpostgresql:ezpostgresql.opam#master",
     "graphql_ppx": "briskml/graphql_ppx#4bc8a40",
-    "ocaml": "~4.7.1000",
+    "ocaml": "~4.6.0",
     "pesy": "*",
     "ppx_deriving_yojson":
       "ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#master",
     "refmterr": "*"
   },
-  "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" },
+  "devDependencies": {
+    "@opam/merlin": "^3.0.3",
+    "ocaml": "~4.6.0",
+    "ocaml-language-server": "*"
+  },
   "resolutions": {
     "@opam/httpkit": "ostera/httpkit:httpkit.opam#5e627eb",
     "@opam/httpkit-lwt": "ostera/httpkit:httpkit-lwt.opam#5e627eb",

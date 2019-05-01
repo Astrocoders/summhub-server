@@ -19,8 +19,8 @@ build: [
 depends: [
   "ocaml" {>= "4.05"}
   "dune" {build & >= "1.4.0"}
-  "base" {build & < "v0.13"}
-  "stdio" {build & < "v0.13"}
+  "base" {build}
+  "stdio" {build}
   "base-bytes"
 ]
 
@@ -32,7 +32,7 @@ depexts: [
   ["postgresql-devel"] {os-distribution = "centos"}
   ["postgresql-devel"] {os-distribution = "rhel"}
   ["postgresql-devel"] {os-distribution = "fedora"}
-  ["postgresql-devel"] {os-family = "suse"}
+  ["postgresql-devel"] {os-distribution = "opensuse"}
   ["postgresql-dev"] {os-distribution = "alpine"}
   ["postgresql"] {os = "macos" & os-distribution = "homebrew"}
   ["postgresql96"] {os = "macos" & os-distribution = "macports"}
@@ -44,6 +44,6 @@ description: """
 Postgresql offers library functions for accessing PostgreSQL databases."""
 url {
   src:
-    "https://github.com/mmottl/postgresql-ocaml/releases/download/4.4.1/postgresql-4.4.1.tbz"
-  checksum: "md5=7d6acaa0166e9849b08ad16a2d0ed543"
+    "https://github.com/mmottl/postgresql-ocaml/releases/download/4.4.2/postgresql-4.4.2.tbz"
+  checksum: "md5=a33ddf73b99ea63a916134e5f0debbb4"
 }
