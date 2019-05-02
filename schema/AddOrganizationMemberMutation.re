@@ -2,23 +2,6 @@ open Graphql_lwt;
 open GraphqlHelpers;
 open Library;
 
-exception Error_on_add_organization_member;
-
-module Mutation = [%graphql
-  {|
-  mutation AddOrganizationMemberMutation($input: [members_insert_input!]!) {
-    insert_members(objects: $input) {
-      returning {
-        id
-        organization_id
-        email
-        created_at
-      }
-    }
-  }
-|}
-];
-
 type addOrganizationMemberInput = {
   organizationId: string,
   email: string,
@@ -67,20 +50,6 @@ let payload =
     )
   );
 
-[@deriving yojson]
-type memberInput = {
-  [@key "organization_id"]
-  organization_id: string,
-  [@key "email"]
-  email: string,
-};
-
-[@deriving yojson]
-type variables = {
-  [@key "input"]
-  input: memberInput,
-};
-
 let addOrganizationMember =
   Schema.(
     io_field(
@@ -90,61 +59,15 @@ let addOrganizationMember =
       ~resolve=(info, (), input) =>
       switch (info.user) {
       | Some(user) =>
-        /* OCaml object syntax */
-        let queryInput = {
-          pub email = Some(input.email);
-          pub organizationsByorganizationId = None;
-          pub created_at = None;
-          /* Needed because graphql_ppx defines scalar types to Json by default */
-          pub organization_id =
-            Some(
-              `Assoc([("organization_id", `String(input.organizationId))]),
-            );
-          pub id = None
-        };
-        let mutation = Mutation.make(~input=[|queryInput|], ());
-        let parseResponse = result => {
-          mutation#parse(result)#insert_members
-          |> (
-            members => {
-              switch (members) {
-              | Some(members) =>
-                Array.length(members#returning) > 0
-                  ? members#returning[0]
-                  : raise(Error_on_add_organization_member)
-              | None => raise(Error_on_add_organization_member)
-              };
-            }
-          );
-        };
-        let mutationVariables =
-          variables_to_yojson({
-            input: {
-              organization_id: input.organizationId,
-              email: input.email,
-            },
-          });
         let%lwt result =
-          Client.get(
-            mutation#query,
-            ~variables=mutationVariables,
-            parseResponse,
+          Member.insert(
+            ~email=input.email,
+            ~organizationId=input.organizationId,
+            (),
           );
         switch (result) {
-        | Result.Ok(content) =>
-          Lwt.return(
-            Ok((
-              None,
-              Some(
-                Member.{
-                  id: Util.JSON.getStringWithDefault("", content#id),
-                  email: content#email,
-                },
-              ),
-            )),
-          )
-        | Result.Error(_error) =>
-          Lwt.return(Ok((Some(Errors.somethingWentWrong), None)))
+        | Some(member) => Lwt.return(Ok((None, Some(member))))
+        | None => Lwt.return(Ok((Some(Errors.somethingWentWrong), None)))
         };
       | None => Lwt.return(Ok((Some(Errors.unauthorized), None)))
       }
