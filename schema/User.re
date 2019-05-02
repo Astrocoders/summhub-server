@@ -1,6 +1,8 @@
 open Graphql_lwt;
 open Library;
 
+module Model = Models.User;
+
 type role =
   | User
   | Admin;
@@ -13,30 +15,37 @@ type t = {
 
 type user = t;
 
-module ModelConfig = {
-  type t = user;
-  let table = "app_users";
-  let parseRow = row => {
-    id: row[0],
-    email: row[1],
-    role: row[2] == "ADMIN" ? Admin : User,
+let parseRole = roleString =>
+  switch (roleString) {
+  | Some("ADMIN") => Admin
+  | _ => User
+  };
+
+let parseUser = user => {
+  let (id, email, role) = user;
+  {
+    id,
+    email,
+    role: parseRole(role),
   };
 };
 
-module Model = Model.Make(ModelConfig);
+let processSingleResult = result => List.length(result) > 0 ? Some(parseUser(Array.of_list(result)[0])) : None;
 
-let getByEmail = (connection, email) =>
-  Model.findOne(~connection, ~clause="email=" ++ "'" ++ email ++ "'", ());
+let getByEmail = email => {
+  let%lwt result = Model.getByEmail(email);
+  processSingleResult(result) |> Lwt.return
+};
 
-let insert = (connection, ~email, ~role) =>
-  Model.insert(
-    ~connection,
-    ~fields=[
-      ("email", Database.wrapStringValue(email)),
-      ("role", Database.wrapStringValue(role)),
-    ],
-    (),
-  );
+let insert = (~email, ~role=?, ()) => {
+  let%lwt result = Model.insert(~email, ~role?, ());
+  processSingleResult(result) |> Lwt.return;
+};
+
+let getById = id => {
+  let%lwt result = Model.getById(id);
+  processSingleResult(result) |> Lwt.return
+};
 
 let sendSignInLink = user =>
   Sendgrid.sendEmail(
