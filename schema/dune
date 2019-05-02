@@ -7,6 +7,6 @@
    (name AppSchema)
    ; Other libraries list this name in their package.json 'require' field to use this library.
    (public_name summarize.schema)
-   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix summarize.graphql-helpers ezpostgresql summarize.lib tls )
-   (preprocess ( pps lwt_ppx graphql_ppx ppx_deriving_yojson ))  ; From package.json preprocess field
+   (libraries  lwt lwt.unix str pastel.lib console.lib graphql-lwt graphql-cohttp cohttp-lwt-unix summarize.graphql-helpers summarize.lib tls summarize.models )
+   (preprocess ( pps lwt_ppx ppx_deriving_yojson ppx_pgsql ))  ; From package.json preprocess field
 )
