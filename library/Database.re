@@ -1,11 +1,10 @@
-open Ezpostgresql;
+module PGOCaml = PGOCaml_generic.Make(AsyncThread);
 
-exception Database_not_configured;
+let connection = PGOCaml.connect;
 
-let wrapStringValue = value => "'" ++ value ++ "'";
+let pool: Lwt_pool.t(PGOCaml.t(Hashtbl.t(string, bool))) =
+  Lwt_pool.create(16, ~validate=PGOCaml.alive, connection);
 
-let conninfo =
-  try (Sys.getenv("DATABASE_URL")) {
-  | Not_found => raise(Database_not_configured)
-  };
-let pool = Pool.create(~conninfo, ~size=10, ());
+let withPool = f => Lwt_pool.use(pool, f);
+
+let runQuery = f => withPool(f);
