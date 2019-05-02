@@ -1,5 +1,5 @@
 {
-  "checksum": "7b438cf2c9f1b7e90b9bc7ae16d92f8a",
+  "checksum": "ff68330493fb292ca569bb05a84c25ba",
   "root": "summarize@link-dev:./package.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#d488cd9321cd5036bd36ec96744ce78c5d45fc49@d41d8cd9": {
@@ -134,6 +134,7 @@
       "overrides": [],
       "dependencies": [
         "refmterr@3.1.10@d41d8cd9",
+        "ppx_pgsql@github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9@d41d8cd9",
         "ppx_deriving_yojson@github:ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#cadb5f653d4c2a94bc9e601c02dac75698cd5b97@d41d8cd9",
         "pesy@0.4.1@d41d8cd9", "ocaml@4.6.10@d41d8cd9",
         "graphql_ppx@github:briskml/graphql_ppx#4bc8a40@d41d8cd9",
@@ -141,7 +142,6 @@
         "@reason-native/pastel@0.1.0@d41d8cd9",
         "@reason-native/console@0.0.3@d41d8cd9",
         "@opam/yojson@opam:1.7.0@2d92307e", "@opam/tls@opam:0.10.1@1a01bd34",
-        "@opam/ppx_pgsql@github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9@d41d8cd9",
         "@opam/ppx_let@opam:v0.11.0@15f51b1c",
         "@opam/pgocaml@opam:2.3@899b4bd8",
         "@opam/lwt_ppx@opam:1.2.1@db1172a7", "@opam/lwt@opam:4.1.0@4db5bd2a",
@@ -177,6 +177,32 @@
         "@opam/dune@opam:1.9.1@61bdaadf", "@esy-ocaml/reason@3.4.0@d41d8cd9"
       ],
       "devDependencies": []
+    },
+    "ppx_pgsql@github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9@d41d8cd9": {
+      "id":
+        "ppx_pgsql@github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9@d41d8cd9",
+      "name": "ppx_pgsql",
+      "version":
+        "github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9",
+      "source": {
+        "type": "install",
+        "source": [
+          "github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9"
+        ]
+      },
+      "overrides": [],
+      "dependencies": [
+        "@opam/ppxlib@opam:0.5.0@674193ca",
+        "@opam/pgocaml@opam:2.3@899b4bd8",
+        "@opam/ocamlfind@opam:1.8.0@f744a0c5",
+        "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
+        "@opam/dune@opam:1.9.1@61bdaadf", "@esy-ocaml/substs@0.0.1@d41d8cd9"
+      ],
+      "devDependencies": [
+        "@opam/ppxlib@opam:0.5.0@674193ca",
+        "@opam/pgocaml@opam:2.3@899b4bd8",
+        "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71"
+      ]
     },
     "ppx_deriving_yojson@github:ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#cadb5f653d4c2a94bc9e601c02dac75698cd5b97@d41d8cd9": {
       "id":
@@ -1230,32 +1256,6 @@
         "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/base@opam:v0.11.1@6ff71eb3"
-      ]
-    },
-    "@opam/ppx_pgsql@github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9@d41d8cd9": {
-      "id":
-        "@opam/ppx_pgsql@github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9@d41d8cd9",
-      "name": "@opam/ppx_pgsql",
-      "version":
-        "github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9",
-      "source": {
-        "type": "install",
-        "source": [
-          "github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9"
-        ]
-      },
-      "overrides": [],
-      "dependencies": [
-        "@opam/ppxlib@opam:0.5.0@674193ca",
-        "@opam/pgocaml@opam:2.3@899b4bd8",
-        "@opam/ocamlfind@opam:1.8.0@f744a0c5",
-        "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
-        "@opam/dune@opam:1.9.1@61bdaadf", "@esy-ocaml/substs@0.0.1@d41d8cd9"
-      ],
-      "devDependencies": [
-        "@opam/ppxlib@opam:0.5.0@674193ca",
-        "@opam/pgocaml@opam:2.3@899b4bd8",
-        "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71"
       ]
     },
     "@opam/ppx_let@opam:v0.11.0@15f51b1c": {
