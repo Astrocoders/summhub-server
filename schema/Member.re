@@ -5,6 +5,8 @@ open Library;
 type t = {
   id: string,
   email: string,
+  organizationId: string,
+  createdAt: string,
 };
 
 let typ =
@@ -31,15 +33,23 @@ module Config = {
 
 module Connection = Connection.Make(Config);
 
-type member = t;
+module Model = Models.Member;
 
-module ModelConfig = {
-  type t = member;
-  let table = "members";
-  let parseRow = row => {
-    id: row[0],
-    email: row[2]
+let parseMember = member => {
+  let (id, organizationId, email, createdAt) = member;
+  {
+    id,
+    email,
+    organizationId: Util.Option.getWithDefault("", organizationId),
+    createdAt: Util.Calendar.(defaultToNow(createdAt) |> toDateString),
   };
 };
 
-module Model = Model.Make(ModelConfig);
+let processSingleResult = result =>
+  List.length(result) > 0
+    ? Some(parseMember(Array.of_list(result)[0])) : None;
+
+let insert = (~email, ~organizationId, ()) => {
+  let%lwt result = Model.insert(~email, ~organizationId, ());
+  processSingleResult(result) |> Lwt.return;
+};
