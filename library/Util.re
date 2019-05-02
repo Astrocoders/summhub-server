@@ -9,6 +9,13 @@ module Option = {
   };
 };
 
+module Calendar = {
+  open CalendarLib;
+  let defaultToNow = value => Option.getWithDefault(Calendar.now(), value);
+  let toDateString = calendar =>
+    Calendar.(calendar |> to_date |> Printer.Date.to_string);
+};
+
 module JSON = {
   let getStringWithDefault = (default, json) => {
     switch (json) {

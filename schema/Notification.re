@@ -64,21 +64,3 @@ let typ =
       ]
     )
   );
-
-type notification = t;
-
-module ModelConfig = {
-  type t = notification;
-  let table = "notifications";
-  let parseRow = row => {
-    id: row[0],
-    title: row[2],
-    body: row[3],
-    icon: String.length(row[4]) > 0 ? Some(row[4]) : None,
-    link: String.length(row[5]) > 0 ? Some(row[5]) : None,
-    payload: row[6],
-    createdAt: row[7],
-  };
-};
-
-module Model = Model.Make(ModelConfig);

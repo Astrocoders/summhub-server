@@ -17,11 +17,20 @@
       "name": "summarize.lib",
       "namespace": "Library",
       "require": [
-        "ezpostgresql", "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str",
+        "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str",
         "pastel.lib", "console.lib", "graphql-lwt", "graphql-cohttp",
         "cohttp-lwt-unix", "jwt", "yojson", "tls"
       ],
-      "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson" ]
+      "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql" ]
+    },
+    "models": {
+      "name": "summarize.models",
+      "namespace": "Models",
+      "require": [
+        "lwt", "lwt.unix", "ppx_let", "lwt_ppx",
+        "pastel.lib", "console.lib", "yojson", "tls", "summarize.lib"
+      ],
+      "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql" ]
     },
     "graphql-helpers": {
       "name": "summarize.graphql-helpers",
@@ -39,24 +48,26 @@
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
         "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers",
-        "ezpostgresql", "summarize.lib", "tls"
+        "summarize.lib", "tls", "summarize.models"
       ],
-      "preprocess": [ "pps", "lwt_ppx", "graphql_ppx", "ppx_deriving_yojson" ]
+      "preprocess": [
+        "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql"
+      ]
     },
     "executable": {
       "require": [
         "lwt", "lwt.unix", "str", "ppx_let", "lwt_ppx", "pastel.lib",
         "console.lib", "graphql-lwt", "graphql-cohttp", "cohttp-lwt-unix",
         "summarize.lib", "summarize.schema", "summarize.graphql-helpers",
-        "ezpostgresql", "jwt", "tls"
+        "jwt", "tls"
       ],
       "main": "Server",
       "name": "Server.exe",
-      "preprocess": [ "pps", "lwt_ppx", "graphql_ppx" ]
+      "preprocess": [ "pps", "lwt_ppx" ]
     }
   },
   "scripts": {
-    "start": "esy b && env $(cat .env | xargs) esy x Server.exe",
+    "start": "env $(cat .env | xargs) esy b && env $(cat .env | xargs) esy x Server.exe",
     "graphql:update-schema": "env $(cat .env | xargs) bash update_schema.sh",
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
     "test": "esy x TestSummarize.exe",
@@ -70,7 +81,7 @@
   "dependencies": {
     "@esy-ocaml/reason": ">=3.4.0",
     "@opam/cohttp-lwt-unix": "1.2.0",
-    "@opam/dune": "^1.7.2",
+    "@opam/dune": "*",
     "@opam/graphql-cohttp": "0.8.0",
     "@opam/graphql-lwt": "0.8.0",
     "@opam/httpaf": "*",
@@ -80,20 +91,24 @@
     "@opam/jwt": "0.1",
     "@opam/lwt": "4.1.0",
     "@opam/lwt_ppx": "1.2.1",
+    "@opam/pgocaml": "2.3",
     "@opam/ppx_let": "v0.11.0",
     "@opam/tls": "0.10.1",
     "@opam/yojson": "1.7.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
-    "ezpostgresql": "bobbypriambodo/ezpostgresql:ezpostgresql.opam#master",
-    "graphql_ppx": "briskml/graphql_ppx#4bc8a40",
-    "ocaml": "~4.7.1000",
+    "ocaml": "~4.6.0",
     "pesy": "*",
     "ppx_deriving_yojson":
       "ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#master",
+    "ppx_pgsql": "tizoc/ppx_pgsql:ppx_pgsql.opam",
     "refmterr": "*"
   },
-  "devDependencies": { "@opam/merlin": "*", "ocaml-language-server": "*" },
+  "devDependencies": {
+    "@opam/merlin": "^3.0.3",
+    "ocaml": "~4.6.0",
+    "ocaml-language-server": "*"
+  },
   "resolutions": {
     "@opam/httpkit": "ostera/httpkit:httpkit.opam#5e627eb",
     "@opam/httpkit-lwt": "ostera/httpkit:httpkit-lwt.opam#5e627eb",

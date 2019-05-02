@@ -6,6 +6,8 @@ type t = {
   id: string,
   name: string,
   webhook: string,
+  organizationId: string,
+  createdAt: string,
 };
 
 let typ =
@@ -39,12 +41,24 @@ module Config = {
 
 module Connection = Connection.Make(Config);
 
-type project = t;
+module Model = Models.Project;
 
-module ModelConfig = {
-  type t = project;
-  let table = "projects";
-  let parseRow = row => {id: row[0], name: row[2], webhook: row[3]};
+let parseMember = member => {
+  let (id, organizationId, name, webhook, createdAt) = member;
+  {
+    id,
+    webhook,
+    name,
+    organizationId,
+    createdAt: Util.Calendar.(defaultToNow(createdAt) |> toDateString),
+  };
 };
 
-module Model = Model.Make(ModelConfig);
+let processSingleResult = result =>
+  List.length(result) > 0
+    ? Some(parseMember(Array.of_list(result)[0])) : None;
+
+let insert = (~name, ~webhook, ~organizationId) => {
+  let%lwt result = Model.insert(~name, ~webhook, ~organizationId);
+  processSingleResult(result) |> Lwt.return;
+};

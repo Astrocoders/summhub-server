@@ -121,7 +121,6 @@ let _ =
           req =>
             Lwt_main.run(
               {
-                let connection = Database.pool;
                 let%lwt user = {
                   Cohttp.Header.get(req.headers, "token")
                   |> (
@@ -129,17 +128,12 @@ let _ =
                     | None => Lwt.return(None)
                     | Some(token) => {
                         let userId = Auth.decodeToken(token);
-                        let%lwt user =
-                          User.Model.findOne(
-                            ~connection,
-                            ~clause="id=" ++ "'" ++ userId ++ "'",
-                            (),
-                          );
+                        let%lwt user = User.getById(userId);
                         Lwt.return(user);
                       }
                   );
                 };
-                Lwt.return(Context.{user, connection});
+                Lwt.return(Context.{user: user});
               },
             ),
           schema,
@@ -150,7 +144,9 @@ let _ =
       Console.log(
         <Pastel>
           <Pastel> "Running at " </Pastel>
-          <Pastel color=Cyan>{ "http://localhost:" ++ string_of_int(port) ++ "/graphql"} </Pastel>
+          <Pastel color=Cyan>
+            {"http://localhost:" ++ string_of_int(port) ++ "/graphql"}
+          </Pastel>
         </Pastel>,
       );
       Cohttp_lwt_unix.Server.create(~mode, server);

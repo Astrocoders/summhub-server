@@ -2,10 +2,13 @@ open Graphql_lwt;
 open GraphqlHelpers;
 open Library;
 
+module Model = Models.Organization;
+
 type t = {
   id: string,
   name: string,
   createdAt: string,
+  userId: string,
 };
 
 let typ =
@@ -54,23 +57,22 @@ module Config = {
 
 module Connection = Connection.Make(Config);
 
-type organization = t;
-
-module ModelConfig = {
-  type t = organization;
-  let table = "organizations";
-  let parseRow = row => {id: row[0], name: row[1], createdAt: row[2]};
+let parseOrganization = organization => {
+  let (id, name, createdAt, userId) = organization;
+  {
+    id,
+    name: Util.Option.getWithDefault("", name),
+    createdAt: Util.Calendar.(defaultToNow(createdAt) |> toDateString),
+    userId,
+  };
 };
 
-module Model = Model.Make(ModelConfig);
+let processSingleResult = result =>
+  List.length(result) > 0
+    ? Some(parseOrganization(Array.of_list(result)[0])) : None;
 
 /* TODO: Fetch random name  */
-let insert = (connection, ~userId) =>
-  Model.insert(
-    ~connection,
-    ~fields=[
-      ("name", Database.wrapStringValue("Organization Created")),
-      ("user_id", Database.wrapStringValue(userId)),
-    ],
-    (),
-  );
+let insert = (~name="Organization Created", ~userId, ()) => {
+  let%lwt result = Model.insert(~name, ~userId, ());
+  processSingleResult(result) |> Lwt.return;
+};

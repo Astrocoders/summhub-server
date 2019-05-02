@@ -21,8 +21,8 @@ let requestSignInLink =
       "requestSignInLink",
       ~typ=non_null(GraphqlTypes.errorPayloadType),
       ~args=Arg.[arg("input", ~typ=non_null(requestSignInLinkInput))],
-      ~resolve=(context: Context.t, (), email) => {
-        let%lwt user = User.getByEmail(context.connection, email);
+      ~resolve=(_, (), email) => {
+        let%lwt user = User.getByEmail(email);
         switch (user) {
         | Some(user) =>
           let%lwt (response, _) = User.sendSignInLink(user);
@@ -34,7 +34,7 @@ let requestSignInLink =
           };
         | None =>
           let%lwt result =
-            User.insert(context.connection, ~email, ~role="USER");
+            User.insert(~email, ~role="USER", ());
           switch (result) {
           | None => Lwt.return(Ok(Some(Errors.somethingWentWrong)))
           | Some(user) =>
