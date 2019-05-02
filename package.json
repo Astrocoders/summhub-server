@@ -17,7 +17,7 @@
       "name": "summarize.lib",
       "namespace": "Library",
       "require": [
-        "ezpostgresql", "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str",
+        "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str",
         "pastel.lib", "console.lib", "graphql-lwt", "graphql-cohttp",
         "cohttp-lwt-unix", "jwt", "yojson", "tls"
       ],
@@ -27,7 +27,7 @@
       "name": "summarize.models",
       "namespace": "Models",
       "require": [
-        "ezpostgresql", "lwt", "lwt.unix", "ppx_let", "lwt_ppx",
+        "lwt", "lwt.unix", "ppx_let", "lwt_ppx",
         "pastel.lib", "console.lib", "yojson", "tls", "summarize.lib"
       ],
       "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql" ]
@@ -48,10 +48,10 @@
       "require": [
         "lwt", "lwt.unix", "str", "pastel.lib", "console.lib", "graphql-lwt",
         "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers",
-        "ezpostgresql", "summarize.lib", "tls", "summarize.models"
+        "summarize.lib", "tls", "summarize.models"
       ],
       "preprocess": [
-        "pps", "lwt_ppx", "graphql_ppx", "ppx_deriving_yojson", "ppx_pgsql"
+        "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql"
       ]
     },
     "executable": {
@@ -59,11 +59,11 @@
         "lwt", "lwt.unix", "str", "ppx_let", "lwt_ppx", "pastel.lib",
         "console.lib", "graphql-lwt", "graphql-cohttp", "cohttp-lwt-unix",
         "summarize.lib", "summarize.schema", "summarize.graphql-helpers",
-        "ezpostgresql", "jwt", "tls"
+        "jwt", "tls"
       ],
       "main": "Server",
       "name": "Server.exe",
-      "preprocess": [ "pps", "lwt_ppx", "graphql_ppx" ]
+      "preprocess": [ "pps", "lwt_ppx" ]
     }
   },
   "scripts": {
@@ -97,8 +97,6 @@
     "@opam/yojson": "1.7.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
-    "ezpostgresql": "bobbypriambodo/ezpostgresql:ezpostgresql.opam#master",
-    "graphql_ppx": "briskml/graphql_ppx#4bc8a40",
     "ocaml": "~4.6.0",
     "pesy": "*",
     "ppx_deriving_yojson":

@@ -1,5 +1,5 @@
 {
-  "checksum": "ff68330493fb292ca569bb05a84c25ba",
+  "checksum": "3e014f235da52db097c9eab02f7ddd0f",
   "root": "summarize@link-dev:./package.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#d488cd9321cd5036bd36ec96744ce78c5d45fc49@d41d8cd9": {
@@ -137,8 +137,6 @@
         "ppx_pgsql@github:tizoc/ppx_pgsql:ppx_pgsql.opam#7051058d47b0b9f8991d26594f92e9b483a716c9@d41d8cd9",
         "ppx_deriving_yojson@github:ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#cadb5f653d4c2a94bc9e601c02dac75698cd5b97@d41d8cd9",
         "pesy@0.4.1@d41d8cd9", "ocaml@4.6.10@d41d8cd9",
-        "graphql_ppx@github:briskml/graphql_ppx#4bc8a40@d41d8cd9",
-        "ezpostgresql@github:bobbypriambodo/ezpostgresql:ezpostgresql.opam#61bb8510f68752fb63b6ac76548222c8e6b192fc@d41d8cd9",
         "@reason-native/pastel@0.1.0@d41d8cd9",
         "@reason-native/console@0.0.3@d41d8cd9",
         "@opam/yojson@opam:1.7.0@2d92307e", "@opam/tls@opam:0.10.1@1a01bd34",
@@ -192,14 +190,14 @@
       },
       "overrides": [],
       "dependencies": [
-        "@opam/ppxlib@opam:0.5.0@674193ca",
+        "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/pgocaml@opam:2.3@899b4bd8",
         "@opam/ocamlfind@opam:1.8.0@f744a0c5",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/dune@opam:1.9.1@61bdaadf", "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
-        "@opam/ppxlib@opam:0.5.0@674193ca",
+        "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/pgocaml@opam:2.3@899b4bd8",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71"
       ]
@@ -394,24 +392,6 @@
       "dependencies": [ "wrappy@1.0.2@d41d8cd9", "once@1.4.0@d41d8cd9" ],
       "devDependencies": []
     },
-    "graphql_ppx@github:briskml/graphql_ppx#4bc8a40@d41d8cd9": {
-      "id": "graphql_ppx@github:briskml/graphql_ppx#4bc8a40@d41d8cd9",
-      "name": "graphql_ppx",
-      "version": "github:briskml/graphql_ppx#4bc8a40",
-      "source": {
-        "type": "install",
-        "source": [ "github:briskml/graphql_ppx#4bc8a40" ]
-      },
-      "overrides": [],
-      "dependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/yojson@opam:1.7.0@2d92307e",
-        "@opam/result@opam:1.3@bee8bf2e", "@opam/ppxlib@opam:0.5.0@674193ca",
-        "@opam/ppx_tools_versioned@opam:5.2.1@1eeea765",
-        "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
-        "@opam/dune@opam:1.9.1@61bdaadf"
-      ],
-      "devDependencies": []
-    },
     "glob@7.1.2@d41d8cd9": {
       "id": "glob@7.1.2@d41d8cd9",
       "name": "glob",
@@ -443,31 +423,6 @@
       "overrides": [],
       "dependencies": [],
       "devDependencies": []
-    },
-    "ezpostgresql@github:bobbypriambodo/ezpostgresql:ezpostgresql.opam#61bb8510f68752fb63b6ac76548222c8e6b192fc@d41d8cd9": {
-      "id":
-        "ezpostgresql@github:bobbypriambodo/ezpostgresql:ezpostgresql.opam#61bb8510f68752fb63b6ac76548222c8e6b192fc@d41d8cd9",
-      "name": "ezpostgresql",
-      "version":
-        "github:bobbypriambodo/ezpostgresql:ezpostgresql.opam#61bb8510f68752fb63b6ac76548222c8e6b192fc",
-      "source": {
-        "type": "install",
-        "source": [
-          "github:bobbypriambodo/ezpostgresql:ezpostgresql.opam#61bb8510f68752fb63b6ac76548222c8e6b192fc"
-        ]
-      },
-      "overrides": [],
-      "dependencies": [
-        "@opam/result@opam:1.3@bee8bf2e",
-        "@opam/postgresql@opam:4.4.2@8034289b",
-        "@opam/lwt@opam:4.1.0@4db5bd2a", "@opam/dune@opam:1.9.1@61bdaadf",
-        "@esy-ocaml/substs@0.0.1@d41d8cd9"
-      ],
-      "devDependencies": [
-        "@opam/result@opam:1.3@bee8bf2e",
-        "@opam/postgresql@opam:4.4.2@8034289b",
-        "@opam/lwt@opam:4.1.0@4db5bd2a"
-      ]
     },
     "deepmerge@2.1.0@d41d8cd9": {
       "id": "deepmerge@2.1.0@d41d8cd9",
@@ -1114,20 +1069,20 @@
         "ocaml@4.6.10@d41d8cd9", "@opam/result@opam:1.3@bee8bf2e"
       ]
     },
-    "@opam/ppxlib@opam:0.5.0@674193ca": {
-      "id": "@opam/ppxlib@opam:0.5.0@674193ca",
+    "@opam/ppxlib@opam:0.6.0@3500c1bb": {
+      "id": "@opam/ppxlib@opam:0.6.0@3500c1bb",
       "name": "@opam/ppxlib",
-      "version": "opam:0.5.0",
+      "version": "opam:0.6.0",
       "source": {
         "type": "install",
         "source": [
-          "archive:https://opam.ocaml.org/cache/md5/bb/bb278ff6e819e0e4a4d8a005bb2512a4#md5:bb278ff6e819e0e4a4d8a005bb2512a4",
-          "archive:https://github.com/ocaml-ppx/ppxlib/releases/download/0.5.0/ppxlib-0.5.0.tbz#md5:bb278ff6e819e0e4a4d8a005bb2512a4"
+          "archive:https://opam.ocaml.org/cache/md5/e2/e2d129139891c135acc6d52a3fa9f731#md5:e2d129139891c135acc6d52a3fa9f731",
+          "archive:https://github.com/ocaml-ppx/ppxlib/releases/download/0.6.0/ppxlib-0.6.0.tbz#md5:e2d129139891c135acc6d52a3fa9f731"
         ],
         "opam": {
           "name": "ppxlib",
-          "version": "0.5.0",
-          "path": "esy.lock/opam/ppxlib.0.5.0"
+          "version": "0.6.0",
+          "path": "esy.lock/opam/ppxlib.0.6.0"
         }
       },
       "overrides": [],
@@ -1246,14 +1201,14 @@
       },
       "overrides": [],
       "dependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
+        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/jbuilder@opam:transition@58bdfe0a",
         "@opam/base@opam:v0.11.1@6ff71eb3",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
+        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/base@opam:v0.11.1@6ff71eb3"
       ]
@@ -1276,14 +1231,14 @@
       },
       "overrides": [],
       "dependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
+        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/jbuilder@opam:transition@58bdfe0a",
         "@opam/base@opam:v0.11.1@6ff71eb3",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
+        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/base@opam:v0.11.1@6ff71eb3"
       ]
@@ -1306,7 +1261,7 @@
       },
       "overrides": [],
       "dependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
+        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/jbuilder@opam:transition@58bdfe0a",
         "@opam/fieldslib@opam:v0.11.0@c86ba0e6",
@@ -1314,7 +1269,7 @@
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
+        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/fieldslib@opam:v0.11.0@c86ba0e6",
         "@opam/base@opam:v0.11.1@6ff71eb3"
@@ -1412,34 +1367,6 @@
         "@opam/ppx_tools_versioned@opam:5.2.1@1eeea765",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/cstruct@opam:3.7.0@b1f43616"
-      ]
-    },
-    "@opam/postgresql@opam:4.4.2@8034289b": {
-      "id": "@opam/postgresql@opam:4.4.2@8034289b",
-      "name": "@opam/postgresql",
-      "version": "opam:4.4.2",
-      "source": {
-        "type": "install",
-        "source": [
-          "archive:https://opam.ocaml.org/cache/md5/a3/a33ddf73b99ea63a916134e5f0debbb4#md5:a33ddf73b99ea63a916134e5f0debbb4",
-          "archive:https://github.com/mmottl/postgresql-ocaml/releases/download/4.4.2/postgresql-4.4.2.tbz#md5:a33ddf73b99ea63a916134e5f0debbb4"
-        ],
-        "opam": {
-          "name": "postgresql",
-          "version": "4.4.2",
-          "path": "esy.lock/opam/postgresql.4.4.2"
-        }
-      },
-      "overrides": [],
-      "dependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/stdio@opam:v0.11.0@3b11cb88",
-        "@opam/dune@opam:1.9.1@61bdaadf",
-        "@opam/base-bytes@opam:base@19d0c2ff",
-        "@opam/base@opam:v0.11.1@6ff71eb3",
-        "@esy-ocaml/substs@0.0.1@d41d8cd9"
-      ],
-      "devDependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/base-bytes@opam:base@19d0c2ff"
       ]
     },
     "@opam/pgocaml@opam:2.3@899b4bd8": {
@@ -2359,14 +2286,14 @@
       },
       "overrides": [],
       "dependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
+        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/jbuilder@opam:transition@58bdfe0a",
         "@opam/base@opam:v0.11.1@6ff71eb3",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.5.0@674193ca",
+        "ocaml@4.6.10@d41d8cd9", "@opam/ppxlib@opam:0.6.0@3500c1bb",
         "@opam/ocaml-migrate-parsetree@opam:1.2.0@23e55f71",
         "@opam/base@opam:v0.11.1@6ff71eb3"
       ]
