@@ -48,13 +48,3 @@ module Config = {
 };
 
 module Connection = Connection.Make(Config);
-
-type message = t;
-
-module ModelConfig = {
-  type t = message;
-  let table = "messages";
-  let parseRow = row => {id: row[0], email: row[2], message: row[3]};
-};
-
-module Model = Model.Make(ModelConfig);
