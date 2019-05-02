@@ -1,0 +1,12 @@
+
+; !!!! This dune file is generated from the package.json file by pesy. If you modify it by hand
+; !!!! your changes will be undone! Instead, edit the package.json and then rerun 'esy pesy' at the project root.
+; !!!! If you want to stop using pesy and manage this file by hand, change pacakge.json's 'esy.build' command to: refmterr dune build -p  summarize
+(library
+   ; The namespace that other packages/libraries will access this library through
+   (name Models)
+   ; Other libraries list this name in their package.json 'require' field to use this library.
+   (public_name summarize.models)
+   (libraries  ezpostgresql lwt lwt.unix ppx_let lwt_ppx pastel.lib console.lib yojson tls summarize.lib )
+   (preprocess ( pps lwt_ppx ppx_deriving_yojson ppx_pgsql ))  ; From package.json preprocess field
+)
