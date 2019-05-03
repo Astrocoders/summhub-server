@@ -61,8 +61,8 @@ let parseOrganization = organization => {
   let (id, name, createdAt, userId) = organization;
   {
     id,
-    name: Util.Option.getWithDefault("", name),
-    createdAt: Util.Calendar.(defaultToNow(createdAt) |> toDateString),
+    name,
+    createdAt: Util.Calendar.timestampToDateString(createdAt),
     userId,
   };
 };

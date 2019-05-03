@@ -14,6 +14,10 @@ module Calendar = {
   let defaultToNow = value => Option.getWithDefault(Calendar.now(), value);
   let toDateString = calendar =>
     Calendar.(calendar |> to_date |> Printer.Date.to_string);
+  let timestampToDateString = timestamp => {
+    let (calendar, timezone) = timestamp;
+    toDateString(calendar);
+  };
 };
 
 module JSON = {

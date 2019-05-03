@@ -50,7 +50,7 @@ let parseMember = member => {
     webhook,
     name,
     organizationId,
-    createdAt: Util.Calendar.(defaultToNow(createdAt) |> toDateString),
+    createdAt: Util.Calendar.timestampToDateString(createdAt),
   };
 };
 

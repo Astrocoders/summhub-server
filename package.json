@@ -17,9 +17,9 @@
       "name": "summarize.lib",
       "namespace": "Library",
       "require": [
-        "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str",
-        "pastel.lib", "console.lib", "graphql-lwt", "graphql-cohttp",
-        "cohttp-lwt-unix", "jwt", "yojson", "tls"
+        "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "str", "pastel.lib",
+        "console.lib", "graphql-lwt", "graphql-cohttp", "cohttp-lwt-unix",
+        "jwt", "yojson", "tls"
       ],
       "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql" ]
     },
@@ -27,8 +27,8 @@
       "name": "summarize.models",
       "namespace": "Models",
       "require": [
-        "lwt", "lwt.unix", "ppx_let", "lwt_ppx",
-        "pastel.lib", "console.lib", "yojson", "tls", "summarize.lib"
+        "lwt", "lwt.unix", "ppx_let", "lwt_ppx", "pastel.lib", "console.lib",
+        "yojson", "tls", "summarize.lib"
       ],
       "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql" ]
     },
@@ -50,9 +50,7 @@
         "graphql-cohttp", "cohttp-lwt-unix", "summarize.graphql-helpers",
         "summarize.lib", "tls", "summarize.models"
       ],
-      "preprocess": [
-        "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql"
-      ]
+      "preprocess": [ "pps", "lwt_ppx", "ppx_deriving_yojson", "ppx_pgsql" ]
     },
     "executable": {
       "require": [
@@ -67,13 +65,14 @@
     }
   },
   "scripts": {
-    "start": "env $(cat .env | xargs) esy b && env $(cat .env | xargs) esy x Server.exe",
+    "start":
+      "env $(cat .env | xargs) esy b && env $(cat .env | xargs) esy x Server.exe",
     "graphql:update-schema": "env $(cat .env | xargs) bash update_schema.sh",
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
     "test": "esy x TestSummarize.exe",
     "docker:prod": "docker-compose up",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
-    "knex:migrate": "npx knex migrate:latest",
+    "knex:migrate": "env $(cat .env | xargs) npx knex migrate:latest",
     "knex:rollback": "npx knex migrate:rollback",
     "knex:create": "npx knex migrate:make",
     "knex:seed": "npx knex seed:run"
@@ -91,14 +90,16 @@
     "@opam/jwt": "0.1",
     "@opam/lwt": "4.1.0",
     "@opam/lwt_ppx": "1.2.1",
-    "@opam/pgocaml": "2.3",
+    "@opam/pgocaml": "3.2",
     "@opam/ppx_let": "v0.11.0",
     "@opam/tls": "0.10.1",
     "@opam/yojson": "1.7.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
+    "knex": "^0.16.5",
     "ocaml": "~4.6.0",
     "pesy": "*",
+    "pg": "^7.10.0",
     "ppx_deriving_yojson":
       "ocaml-ppx/ppx_deriving_yojson:ppx_deriving_yojson.opam#master",
     "ppx_pgsql": "tizoc/ppx_pgsql:ppx_pgsql.opam",
