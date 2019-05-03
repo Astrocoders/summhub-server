@@ -5,10 +5,10 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      host: process.env.DATABASE_HOST || '127.0.0.1',
-      database: 'summhub_dev',
-      user:     process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD
+      host: process.env.PGHOST || '127.0.0.1',
+      database: process.env.PGDATABASE ||'summhub_dev',
+      user:     process.env.PGUSER,
+      password: process.env.PGPASSWORD
     },
     pool: {
       min: 2,
@@ -22,10 +22,10 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      host: process.env.DATABASE_HOST,
-      database: 'summhub_prod',
-      user:     process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD
+      host: process.env.PGHOST,
+      database: process.env.PGDATABASE ||'summhub_prod',
+      user:     process.env.PGUSER,
+      password: process.env.PGPASSWORD
     },
     pool: {
       min: 2,
