@@ -40,8 +40,8 @@ let parseMember = member => {
   {
     id,
     email,
-    organizationId: Util.Option.getWithDefault("", organizationId),
-    createdAt: Util.Calendar.(defaultToNow(createdAt) |> toDateString),
+    organizationId,
+    createdAt: Util.Calendar.timestampToDateString(createdAt),
   };
 };
 

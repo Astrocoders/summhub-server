@@ -11,30 +11,32 @@ type t = {
   id: string,
   email: string,
   role,
+  createdAt: string,
 };
-
-type user = t;
 
 let parseRole = roleString =>
   switch (roleString) {
-  | Some("ADMIN") => Admin
+  | "ADMIN" => Admin
   | _ => User
   };
 
 let parseUser = user => {
-  let (id, email, role) = user;
+  let (id, email, role, createdAt) = user;
   {
     id,
     email,
     role: parseRole(role),
+    createdAt: Util.Calendar.timestampToDateString(createdAt),
   };
 };
 
-let processSingleResult = result => List.length(result) > 0 ? Some(parseUser(Array.of_list(result)[0])) : None;
+let processSingleResult = result =>
+  List.length(result) > 0
+    ? Some(parseUser(Array.of_list(result)[0])) : None;
 
 let getByEmail = email => {
   let%lwt result = Model.getByEmail(email);
-  processSingleResult(result) |> Lwt.return
+  processSingleResult(result) |> Lwt.return;
 };
 
 let insert = (~email, ~role=?, ()) => {
@@ -44,7 +46,7 @@ let insert = (~email, ~role=?, ()) => {
 
 let getById = id => {
   let%lwt result = Model.getById(id);
-  processSingleResult(result) |> Lwt.return
+  processSingleResult(result) |> Lwt.return;
 };
 
 let sendSignInLink = user =>
