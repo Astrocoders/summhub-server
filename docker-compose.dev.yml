@@ -17,18 +17,6 @@ services:
       - "3000:3000"
     depends_on:
       - db
-      - hasura
-
-  hasura:
-    image: hasura/graphql-engine:v1.0.0-alpha40
-    ports:
-    - "8080:8080"
-    environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://summhub:summhub@db:5432/summhub_dev
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-    depends_on:
-    - db
-
   db:
     image: postgres:latest
     environment:
