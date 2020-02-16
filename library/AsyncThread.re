@@ -1,3 +1,5 @@
+/* Took from https://github.com/anisjonischkeit/opium-pgocaml-ppx-lwt/blob/master/src/pgocaml_thread.ml */
+
 type t('a) = Lwt.t('a);
 
 let return = Lwt.return;
