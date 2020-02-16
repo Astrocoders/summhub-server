@@ -96,7 +96,7 @@
     "@opam/yojson": "1.7.0",
     "@reason-native/console": "^0.0.3",
     "@reason-native/pastel": "^0.1.0",
-    "knex": "^0.16.5",
+    "knex": "^0.20.9",
     "ocaml": "~4.6.0",
     "pesy": "*",
     "pg": "^7.10.0",
